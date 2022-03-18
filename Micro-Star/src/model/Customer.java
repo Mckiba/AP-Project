@@ -110,15 +110,15 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "customerID=" + customerID +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", contact='" + contact + '\'' +
-                ", serviceAddress='" + serviceAddress + '\'' +
-                ", complaintCode='" + complaintCode + '\'' +
-                ", accountNumber=" + accountNumber +
-                ", password='" + password + '\'' +
-                '}';
+        return "Customer:" +
+                "CustomerID: " + customerID +
+                "FullName: '" + fullName + '\'' +
+                "Email: " + email + '\'' +
+                "Contact: " + contact + '\'' +
+                "ServiceAddress: " + serviceAddress + '\'' +
+                "ComplaintCode: " + complaintCode + '\'' +
+                "AccountNumber: " + accountNumber +
+                "Password: " + password + '\''
+        ;
     }
 }
