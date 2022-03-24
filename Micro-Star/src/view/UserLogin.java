@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
 
 public class UserLogin extends JFrame implements ActionListener {
 
@@ -77,7 +78,30 @@ public class UserLogin extends JFrame implements ActionListener {
             pwdText = String.valueOf(passwordField.getPassword());
 
             //TODO: SELECT FROM CUSTOMER TABLE WHERE USERNAME AND PASSWORD MATCH
+            try {
+                Connection connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/swing_demo",
+                        "root", "root");
 
+                PreparedStatement st = (PreparedStatement) connection
+                        .prepareStatement("Select email, password from Customer where name=? and password=?");
+
+                st.setString(1, userText);
+                st.setString(2, pwdText);
+                ResultSet rs = st.executeQuery();
+                if (rs.next()) {
+                    System.out.println("LOGGED IN");
+                    //dispose();
+                    //UserHome ah = new UserHome(userName);
+                    //ah.setTitle("Welcome");
+                    //ah.setVisible(true);
+                    //JOptionPane.showMessageDialog(btnNewButton, "You have successfully logged in");
+                } else {
+                    System.out.println("PASSWORD FAILED");
+                    //JOptionPane.showMessageDialog(btnNewButton, "Wrong Username & Password");
+                }
+            } catch (SQLException sqlException) {
+                sqlException.printStackTrace();
+            }
         }
         if (e.getSource() == resetButton) {
             userTextField.setText("");
