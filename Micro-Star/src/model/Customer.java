@@ -1,6 +1,8 @@
 package model;
 
-public class Customer {
+import java.io.Serializable;
+
+public class Customer implements Serializable {
 
     protected int customerID;
     protected String fullName;

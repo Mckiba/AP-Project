@@ -20,6 +20,9 @@ public class UserLogin extends JFrame implements ActionListener {
     JButton loginButton = new JButton("LOGIN");
     JButton resetButton = new JButton("RESET");
     JCheckBox showPassword = new JCheckBox("Show Password");
+    JRadioButton customer_rdbtn = new JRadioButton("Student");
+    JRadioButton technician_rdbtn = new JRadioButton("Agent");
+    JRadioButton rep_rdbtn = new JRadioButton("Rep");
 
 
     UserLogin() {
@@ -50,6 +53,10 @@ public class UserLogin extends JFrame implements ActionListener {
         showPassword.setBounds(150, 250, 150, 30);
         loginButton.setBounds(50, 300, 100, 30);
         resetButton.setBounds(200, 300, 100, 30);
+        customer_rdbtn.setBounds(50,340,20,20);
+        technician_rdbtn.setBounds(100,340,20,20);
+        rep_rdbtn.setBounds(150,340,20,20);
+
     }
 
     public void addComponentsToContainer() {
@@ -60,6 +67,9 @@ public class UserLogin extends JFrame implements ActionListener {
         container.add(showPassword);
         container.add(loginButton);
         container.add(resetButton);
+        container.add(customer_rdbtn);
+        container.add(technician_rdbtn);
+        container.add(rep_rdbtn);
     }
 
     public void addActionEvent() {
@@ -90,10 +100,6 @@ public class UserLogin extends JFrame implements ActionListener {
                 ResultSet rs = st.executeQuery();
                 if (rs.next()) {
                     System.out.println("LOGGED IN");
-                    //dispose();
-                    //UserHome ah = new UserHome(userName);
-                    //ah.setTitle("Welcome");
-                    //ah.setVisible(true);
                     //JOptionPane.showMessageDialog(btnNewButton, "You have successfully logged in");
                 } else {
                     System.out.println("PASSWORD FAILED");
