@@ -1,82 +1,111 @@
 package server;
 
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.sql.*;
+import javax.swing.*;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.model.User;
 
 
 public class Server extends Thread{
-    private static final Logger logger = LogManager.getLogger(Server.class);
+    private static Connection dBConn = null;
+    private Statement stmt;
+    private ResultSet result = null;
+    private ServerSocket serverSocket;
+    private static Socket connectionSocket;
+    private static ObjectInputStream objIs;
+    private static ObjectOutputStream objOs;
 
-    private final int serverPort;
-    private ArrayList<ClientHandler> clients = new ArrayList<>();
-    private ArrayList<User> clientUser = new ArrayList<>();
-
-    public Server(int serverPort) {
-        this.serverPort = serverPort;
+    Server(){
+        this.createConnection();
+        this.waitForRequests();
     }
 
-    public ArrayList<ClientHandler> getClients(){
-        return clients;
-    }
-
-    public ArrayList<User> getClientAccounts(){
-        for(int i =0; i < clients.size(); i++) {
-            clientUser.add(clients.get(i).getAccount());
+    private void createConnection() {
+        try {
+            //Create new instance of the server-socket listening on port 8888
+            serverSocket = new ServerSocket(8888);
+        }catch ( IOException ex){
+                ex.printStackTrace();
         }
-        return clientUser;
     }
 
-    @SuppressWarnings("resource")
-    @Override
-    public void run() {
-        /**
-         * Creates a server socket that is bound to the port number 3306.
-         * The maximum number of queued incoming connections is set to 60
-         * (when the queue is full, new connections are refused).
-         */
-        try (ServerSocket serverSocket = new ServerSocket(serverPort, 60)){
 
-            LocalDateTime startDateTime = LocalDateTime.now();
-            DateTimeFormatter startDateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-            String serverStartDateTime = startDateTime.format(startDateTimeFormat);
 
-            Socket socketConnection = new Socket();
+    private void configureStreams() {
+        try {
+            //Instantiate the output stream, using the getOutputStream method
+            //of the Socket object as argument to the constructor
+            objOs = new ObjectOutputStream(connectionSocket.getOutputStream());
+            //Instantiate the input stream, using the getOutputStream method
+            //of the Socket object as argument to the constructor
+            objIs = new ObjectInputStream(connectionSocket.getInputStream());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
 
-//			ExecutorService pool = Executors.newFixedThreadPool(20);
-
-            logger.info("Server is listening on port " + serverPort);
-
-            /**
-             * Listen for incoming client requests
-             */
-            while(true) {
-                socketConnection = serverSocket.accept();
-
-                logger.info(" Server has started - " + serverStartDateTime );
-
-                ClientHandler client = new ClientHandler(this, socketConnection);
-                clients.add(client);
-                client.start();
-                logger.info(" Server has started - Clients = " + clients.size() );
-
+    private static Connection getDatabaseConnection(){
+            if (dBConn == null) {
+                try {
+                    String url = "jdbc:mysql://localhost:3306/MicroStar";
+                    dBConn = DriverManager.getConnection(url, "root", "");
+                    JOptionPane.showMessageDialog(null, "B Connection Established", "CONNECTION STATUS", JOptionPane.INFORMATION_MESSAGE);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Could not connect to database\n" + ex, "Connection Failure", JOptionPane.ERROR_MESSAGE);
+                }
             }
-        } catch (IOException ioex) {
-            logger.error(ioex.getMessage()
-                    + "\nAT: " + ioex.getStackTrace());
+        return dBConn;
+    }
+
+
+    static void closeConnection() {
+        try {
+        objOs.close();
+        objIs.close();
+        connectionSocket.close();
+    }catch(IOException ex){
+        ex.printStackTrace();
+    }
+    }
+
+
+    private void waitForRequests() {
+        String action = "";
+        getDatabaseConnection();
+        try {
+            while (true) {
+            connectionSocket = serverSocket.accept ();
+            this.configureStreams();
+            try
+            {
+                action = (String)objIs.readObject();
+                switch(action) {
+                    case "AUTHENTICATE":
+                        System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
+                        //TODO: HANDLE LOGIN
+                        break;
+
+                    case "LOG-OFF":
+                        //TODO:HANDLE LOGOFF
+                        System.out.println("LOG OFF");//handleLogOff();
+                        break;
+                }
+            } catch (ClassNotFoundException | ClassCastException ex) {
+                ex.printStackTrace();
+            }
+                this.closeConnection();
+            }
+            } catch (EOFException ex){
+            System.out.println("Client has terminated connections with the server");
+            ex.printStackTrace();
+        } catch (IOException ex){
+            ex.printStackTrace();
         }
     }
 
-    public void removeClientHandler(ClientHandler client){
-        logger.warn("Removing client");
-        clients.remove(client);
-    }
 }

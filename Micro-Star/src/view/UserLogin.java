@@ -1,5 +1,8 @@
 package view;
 
+import client.Client;
+import model.Customer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +15,7 @@ public class UserLogin extends JFrame implements ActionListener {
     public static void main(String[] args) {
         new UserLogin();
     }
+
     Container container = getContentPane();
     JLabel userLabel = new JLabel("Username");
     JLabel passwordLabel = new JLabel("Password");
@@ -33,7 +37,7 @@ public class UserLogin extends JFrame implements ActionListener {
         initializeComponent();
     }
 
-    public void initializeComponent(){
+    public void initializeComponent() {
         setTitle(" Micro-Star User Login");
         setVisible(true);
         setBounds(10, 10, 370, 600);
@@ -53,9 +57,9 @@ public class UserLogin extends JFrame implements ActionListener {
         showPassword.setBounds(150, 250, 150, 30);
         loginButton.setBounds(50, 300, 100, 30);
         resetButton.setBounds(200, 300, 100, 30);
-        customer_rdbtn.setBounds(50,340,20,20);
-        technician_rdbtn.setBounds(100,340,20,20);
-        rep_rdbtn.setBounds(150,340,20,20);
+        customer_rdbtn.setBounds(50, 340, 20, 20);
+        technician_rdbtn.setBounds(100, 340, 20, 20);
+        rep_rdbtn.setBounds(150, 340, 20, 20);
 
     }
 
@@ -87,27 +91,26 @@ public class UserLogin extends JFrame implements ActionListener {
             userText = userTextField.getText();
             pwdText = String.valueOf(passwordField.getPassword());
 
-            //TODO: SELECT FROM CUSTOMER TABLE WHERE USERNAME AND PASSWORD MATCH
-            try {
-                Connection connection = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/swing_demo",
-                        "root", "root");
+            try{
 
-                PreparedStatement st = (PreparedStatement) connection
-                        .prepareStatement("Select email, password from Customer where name=? and password=?");
+                Client client = new Client();
+                Customer customer = new Customer(userText,pwdText);
 
-                st.setString(1, userText);
-                st.setString(2, pwdText);
-                ResultSet rs = st.executeQuery();
-                if (rs.next()) {
-                    System.out.println("LOGGED IN");
-                    //JOptionPane.showMessageDialog(btnNewButton, "You have successfully logged in");
-                } else {
-                    System.out.println("PASSWORD FAILED");
-                    //JOptionPane.showMessageDialog(btnNewButton, "Wrong Username & Password");
-                }
-            } catch (SQLException sqlException) {
-                sqlException.printStackTrace();
+
+                client.sendAction("AUTHENTICATE");
+                System.out.println("MESSAGE SENT TO SERVER");
+
+                client.sendUser(customer);
+                System.out.println("RECORD SENT TO SERVER");
+
+                client.receiveResponse();
+                System.out.println("RESPONSE RECEIVED FROM SERVER");
+
+
+            }catch (Exception ex){
+                ex.printStackTrace();
             }
+
         }
         if (e.getSource() == resetButton) {
             userTextField.setText("");
