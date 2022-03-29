@@ -24,6 +24,11 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
+    public Customer(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public Customer(Customer c) {
         this.customerID = c.customerID;
         this.fullName = c.fullName;
@@ -121,6 +126,6 @@ public class Customer implements Serializable {
                 "ComplaintCode: " + complaintCode + '\'' +
                 "AccountNumber: " + accountNumber +
                 "Password: " + password + '\''
-        ;
+                ;
     }
 }

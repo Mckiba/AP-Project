@@ -4,18 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import javax.persistence.Query;
-
-import com.model.User;
+import model.User;
 
 import factories.DBConnectorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class UserOperation {
     private static final Logger logger = LogManager.getLogger(UserOperation.class);

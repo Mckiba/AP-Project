@@ -6,12 +6,11 @@ import org.apache.logging.log4j.Logger;
 
 public class MicroStarServer {
     private static final Logger logger = LogManager.getLogger(MicroStarServer.class);
-    private static final int port = 3309;
 
     public static void main(String[] args) {
-        logger.warn("Starting server...");
-        Server server = new Server();
-        server.start();
+        System.out.println("Starting server...");
+        new Server();
+        //server.start();
     }
 }
 

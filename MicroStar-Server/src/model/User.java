@@ -1,18 +1,21 @@
-package com.model;
+package model;
 
-import factories.SessionFactoryBuilder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import factories.SessionFactoryBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Table(name = "Customers")
-public class User {
+public class User implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = -7457037016119921266L;
 
     @Id
     protected String customerID;
@@ -39,6 +42,12 @@ public class User {
         this.contact = contact;
         this.password = password;
         this.accountType = accouuntType;
+    }
+
+    public User( String email, String password, String accountType) {
+        this.email = email;
+        this.password = password;
+        this.accountType = accountType;
     }
 
     public User() {
@@ -122,15 +131,7 @@ public class User {
         transaction.commit();
         session.close();
     }
-    public List<User> readAll() {
-        List<User> studentList = new ArrayList<>();
-        Session session = SessionFactoryBuilder.getSessionFactory().getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        studentList = (List<User>) session.createQuery("FROM User").getResultList();
-        transaction.commit();
-        session.close();
-        return studentList;
-    }
+
     public void delete() {
         Session session = SessionFactoryBuilder.getSessionFactory().getCurrentSession();
         Transaction transaction = session.beginTransaction();

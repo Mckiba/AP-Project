@@ -1,6 +1,7 @@
 package client;
 
 import model.Customer;
+import model.User;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class Client {
 
@@ -59,7 +61,7 @@ public class Client {
 
     }
 
-    public void sendUser(Customer userObj) {
+    public void sendUser(User userObj) {
         this.action = action;
         try {
             objOs.writeObject(userObj);
@@ -73,7 +75,7 @@ public class Client {
             if (action.equalsIgnoreCase("AUTHENTICATE")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 if (flag) {
-                    JOptionPane.showMessageDialog(null, "LOGIN successsfully",
+                    JOptionPane.showMessageDialog(null, "LOGIN successfully",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
                 }
                 if (action.equalsIgnoreCase("LOG OFF")) {
@@ -85,6 +87,23 @@ public class Client {
         } catch (IOException ex) {
         }
     }
+
+    public Object doOperation(ArrayList<Object> operand) {
+        Object result = null;
+
+        try {
+            objOs.writeObject(operand);
+            result = obIs.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        return result;
+
+    }
+
+
 }
 
 

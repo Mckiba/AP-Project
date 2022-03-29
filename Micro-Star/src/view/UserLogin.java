@@ -2,15 +2,16 @@ package view;
 
 import client.Client;
 import model.Customer;
+import model.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class UserLogin extends JFrame implements ActionListener {
-
 
     public static void main(String[] args) {
         new UserLogin();
@@ -35,6 +36,7 @@ public class UserLogin extends JFrame implements ActionListener {
         addComponentsToContainer();
         addActionEvent();
         initializeComponent();
+
     }
 
     public void initializeComponent() {
@@ -90,17 +92,19 @@ public class UserLogin extends JFrame implements ActionListener {
             String pwdText;
             userText = userTextField.getText();
             pwdText = String.valueOf(passwordField.getPassword());
+            String type = "CUSTOMER";
 
             try{
 
                 Client client = new Client();
-                Customer customer = new Customer(userText,pwdText);
+                User user = new User(userText,pwdText,type);
+                String operation = "AUTHENTICATE";
 
 
-                client.sendAction("AUTHENTICATE");
+                client.sendAction(operation);
                 System.out.println("MESSAGE SENT TO SERVER");
 
-                client.sendUser(customer);
+                client.sendUser(user);
                 System.out.println("RECORD SENT TO SERVER");
 
                 client.receiveResponse();
