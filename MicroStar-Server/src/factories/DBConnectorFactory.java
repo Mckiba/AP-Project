@@ -9,13 +9,12 @@ public class DBConnectorFactory {
     private static java.sql.Connection con = null;
 
 
-
     public static Connection getDatabaseConnection() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/MicroStar";
 
         if (con == null) {
             try {
-                con = DriverManager.getConnection(url, "root", "");
+                con = DriverManager.getConnection(url, "root", "password");
                 return con;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -23,7 +22,6 @@ public class DBConnectorFactory {
         }
         return con;
     }
-
 
 
 }

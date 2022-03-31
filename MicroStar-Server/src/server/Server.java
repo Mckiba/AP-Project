@@ -1,7 +1,8 @@
 package server;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Date;
 
 // Server class
@@ -11,8 +12,7 @@ public class Server {
     private ServerSocket server = null;
 
 
-
-    public Server(){
+    public Server() {
         System.out.println("RUNNING");
 
         try {
@@ -43,16 +43,13 @@ public class Server {
                 // separately
                 new Thread(clientSock).start();
             }
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             if (server != null) {
                 try {
                     server.close();
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
