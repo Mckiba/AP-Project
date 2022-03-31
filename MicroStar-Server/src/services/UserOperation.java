@@ -8,8 +8,11 @@ public class UserOperation {
 
     public static boolean loginAuth(User user) {
 
-
-        return LoginAuth.authLoginUser(user);
+        if (LoginAuth.authLoginUser(user))
+        {
+            return true;
+        }
+        return false;
 
     }
 }

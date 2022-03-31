@@ -43,8 +43,8 @@ public class User implements Serializable {
         this.accountType = accouuntType;
     }
 
-    public User(String email, String password, String accountType) {
-        this.email = email;
+    public User(String customerID, String password, String accountType) {
+        this.customerID = customerID;
         this.password = password;
         this.accountType = accountType;
     }

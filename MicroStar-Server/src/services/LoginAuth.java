@@ -16,23 +16,22 @@ public class LoginAuth {
         String userType = user.getAccountType().toUpperCase();
 
         if (userType.equals("CUSTOMER")) {
-            System.out.println("GET USER INFO" + user.getPassword() + user.getEmail());
-            return loginCustomer(user.getEmail(), user.getPassword());
+            System.out.println("GET USER INFO" + user.getPassword() + user.getCustomerID());
+            return loginCustomer(user.getCustomerID(), user.getPassword());
         }
         return false;
     }
 
 
-    public static boolean loginCustomer(String email, String password) {
+    public static boolean loginCustomer(String userID, String password) {
 
-        String userEmail, pass = "";
-        //TODO: CHANGE ACCEPTING USER EMAIL TO ACCEPTING USER ID
+        String ID, pass = "";
 
-        String loginSql = "SELECT customer_id, full_name, email, contact, service_address, complaint_code, account_number, password, password FROM MicroStar.`customers` WHERE email = ? AND password =?";
+        String loginSql = "SELECT customer_id, full_name, email, contact, service_address, complaint_code, account_number, password, password FROM MicroStar.`customers` WHERE customer_id = ? AND password =?";
 
         try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()) {
             PreparedStatement statement = dbConn.prepareStatement(loginSql);
-            statement.setString(1, email);
+            statement.setString(1, userID);
             statement.setString(2, password);
 
             System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
@@ -44,13 +43,13 @@ public class LoginAuth {
             System.out.println("Login User");
 
             while (result.next()) {
-                userEmail = result.getString(3);
+                ID = result.getString(1);
                 pass = result.getString(8);
-                System.out.println("USER EMAIL: " + userEmail);
+                System.out.println("USER ID: " + ID);
                 System.out.println("USER PASS: " + pass);
 
 
-                if (userEmail.equals(email) && pass.equals(password))
+                if (ID.equals(userID) && pass.equals(password))
                     return true;
                 System.out.println("USER FOUND");
             }

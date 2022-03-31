@@ -29,7 +29,6 @@ public class ClientHandler implements Runnable {
     public void run() {
         while (true) {
 
-
             try {
                 dos = new ObjectOutputStream(clientSocket.getOutputStream());
                 dis = new ObjectInputStream(clientSocket.getInputStream());
@@ -42,22 +41,19 @@ public class ClientHandler implements Runnable {
                             action = (String) dis.readObject();
                             user = (User) (dis.readObject());
                             switch (action) {
-                                case "AUTHENTICATE":
+                                case "AUTHENTICATE" -> {
                                     System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
                                     System.out.println(user.getEmail());
-                                    //TODO: HANDLE LOGIN
-
                                     boolean userAuthenticated = UserOperation.loginAuth(user);
                                     if (userAuthenticated) {
-                                        System.out.println("USER AUTHENTICATED" + userAuthenticated);
-                                        dos.writeObject(userAuthenticated);
-                                    }
-                                    break;
-
-                                case "LOG-OFF":
-                                    //TODO:HANDLE LOGOFF
-                                    System.out.println("LOG OFF");//handleLogOff();
-                                    break;
+                                        System.out.println("USER AUTHENTICATED" + true);
+                                        dos.writeObject(true);
+                                        dos.writeObject(user);
+                                    } else dos.writeObject(false);
+                                }
+                                case "LOG-OFF" ->
+                                        //TODO:HANDLE LOGOFF
+                                        System.out.println("LOG OFF");//handleLogOff();
                             }
                         }
                     }
@@ -71,9 +67,6 @@ public class ClientHandler implements Runnable {
                 e.printStackTrace();
             }
         }
-
-
     }
-
 }
 
