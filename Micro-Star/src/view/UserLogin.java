@@ -13,25 +13,29 @@ import java.util.ArrayList;
 
 public class UserLogin extends JFrame implements ActionListener {
 
-    public static void main(String[] args) {
-        new UserLogin();
-    }
 
     Container container = getContentPane();
-    JLabel userLabel = new JLabel("Username");
+    JLabel userLabel = new JLabel("USER ID");
     JLabel passwordLabel = new JLabel("Password");
     JTextField userTextField = new JTextField();
     JPasswordField passwordField = new JPasswordField();
     JButton loginButton = new JButton("LOGIN");
     JButton resetButton = new JButton("RESET");
     JCheckBox showPassword = new JCheckBox("Show Password");
-    JRadioButton customer_rdbtn = new JRadioButton("Student");
-    JRadioButton technician_rdbtn = new JRadioButton("Agent");
-    JRadioButton rep_rdbtn = new JRadioButton("Rep");
 
 
-    UserLogin() {
+    JRadioButton jRadioButton1 = new JRadioButton();
+    JRadioButton jRadioButton2 = new JRadioButton();
+    JRadioButton jRadioButton3 = new JRadioButton();
+
+    ButtonGroup G1 = new ButtonGroup();
+
+
+
+
+    public UserLogin() {
         setLayoutManager();
+        setTexts();
         setLocationAndSize();
         addComponentsToContainer();
         addActionEvent();
@@ -39,10 +43,17 @@ public class UserLogin extends JFrame implements ActionListener {
 
     }
 
+    public void setTexts(){
+        jRadioButton1.setText("CUSTOMER");
+        jRadioButton2.setText("AGENT");
+        jRadioButton3.setText("TECHNICIAN");
+
+    }
+
     public void initializeComponent() {
         setTitle(" Micro-Star User Login");
         setVisible(true);
-        setBounds(10, 10, 370, 600);
+        setBounds(10, 10, 600, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
     }
@@ -57,11 +68,15 @@ public class UserLogin extends JFrame implements ActionListener {
         userTextField.setBounds(150, 150, 150, 30);
         passwordField.setBounds(150, 220, 150, 30);
         showPassword.setBounds(150, 250, 150, 30);
-        loginButton.setBounds(50, 300, 100, 30);
-        resetButton.setBounds(200, 300, 100, 30);
-        customer_rdbtn.setBounds(50, 340, 20, 20);
-        technician_rdbtn.setBounds(100, 340, 20, 20);
-        rep_rdbtn.setBounds(150, 340, 20, 20);
+        loginButton.setBounds(50, 400, 100, 30);
+        resetButton.setBounds(200, 400, 100, 30);
+
+        jRadioButton1.setBounds(50, 300, 120, 50);
+        jRadioButton2.setBounds(150, 300, 80, 50);
+        jRadioButton3.setBounds(250, 300, 80, 50);
+
+
+
 
     }
 
@@ -73,9 +88,16 @@ public class UserLogin extends JFrame implements ActionListener {
         container.add(showPassword);
         container.add(loginButton);
         container.add(resetButton);
-        container.add(customer_rdbtn);
-        container.add(technician_rdbtn);
-        container.add(rep_rdbtn);
+        container.add(jRadioButton1);
+
+        container.add(jRadioButton2);
+        container.add(jRadioButton3);
+
+        // Adding "jRadioButton1" and "jRadioButton3" in a Button Group "G2".
+        G1.add(jRadioButton1);
+        G1.add(jRadioButton2);
+        G1.add(jRadioButton3);
+
     }
 
     public void addActionEvent() {
@@ -92,21 +114,28 @@ public class UserLogin extends JFrame implements ActionListener {
             String pwdText;
             userText = userTextField.getText();
             pwdText = String.valueOf(passwordField.getPassword());
-            String type = "CUSTOMER";
+            String type = "";
+            if (jRadioButton1.isSelected()) {
+                type = "CUSTOMER";
+            }
+            else if (jRadioButton2.isSelected()) {
+                type = "AGENT";
+            } else if (jRadioButton3.isSelected()){
+                type = "TECHNICIAN";
+            }
+
 
             try{
+                //TODO: TAKE THIS OPERATION SOMEWHERE ELSE
+                //TODO: ENSURE A RADIO BUTTON IS SELECTED
 
                 Client client = new Client();
-                User user = new User(userText,pwdText,type);
+                User user = new User(pwdText,userText,type);
                 String operation = "AUTHENTICATE";
-
-
                 client.sendAction(operation);
                 System.out.println("MESSAGE SENT TO SERVER");
-
                 client.sendUser(user);
                 System.out.println("RECORD SENT TO SERVER");
-
                 client.receiveResponse();
                 System.out.println("RESPONSE RECEIVED FROM SERVER");
 

@@ -1,18 +1,25 @@
 package client;
 
-import model.Customer;
 import model.User;
+import view.UserLogin;
+import view.Dashboard;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 public class Client {
 
+    static UserLogin userLogin;
+    static Dashboard dashboard;
+
+    public static void main(String[] args) throws IOException {
+        userLogin = new UserLogin();
+       // dashboard = new Dashboard(user);
+    }
     private ObjectOutputStream objOs;
     private ObjectInputStream obIs;
     private String action;
@@ -74,17 +81,23 @@ public class Client {
         try {
             if (action.equalsIgnoreCase("AUTHENTICATE")) {
                 Boolean flag = (Boolean) obIs.readObject();
+                User user = (User) obIs.readObject();
+
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "LOGIN successfully",
+                            "LOGIN", JOptionPane.INFORMATION_MESSAGE);
+                            userLogin.setVisible(false);
+                            new Dashboard(user);
+                }else{
+                    JOptionPane.showMessageDialog(null, "LOGIN FAILED",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
                 }
                 if (action.equalsIgnoreCase("LOG OFF")) {
                     System.out.println("LOGGING OGG");
                 }
             }
-        } catch (ClassCastException | ClassNotFoundException ex) {
+        } catch (ClassCastException | ClassNotFoundException | IOException ex) {
             ex.printStackTrace();
-        } catch (IOException ex) {
         }
     }
 

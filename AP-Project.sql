@@ -40,7 +40,7 @@ CREATE TABLE `accounts` (
   `payment_status` varchar(255),
   `amount_due` float8,
   `payment_due_date` datetime,
-  `status` products_status,
+  `status` varchar(255),
   `created_at` datetime DEFAULT (now())
 );
 

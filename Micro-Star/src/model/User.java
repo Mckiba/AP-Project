@@ -6,17 +6,25 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = -7457037016119921266L;
 
+   protected String customerID;
     protected String password ;
     protected  String email;
-    protected String type;
+    protected String accountType;
 
-    public User(String password, String email, String type) {
+    public User(String password, String customerID, String accountType) {
 
         this.password = password;
-        this.email = email;
-        this.type = type;
+        this.customerID = customerID;
+        this.accountType = accountType;
     }
 
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        this.customerID = customerID;
+    }
 
     public String getPassword() {
         return password;
@@ -34,11 +42,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getType() {
-        return type;
+    public String getAccountType() {
+        return accountType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 }
