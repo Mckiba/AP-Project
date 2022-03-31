@@ -8,15 +8,16 @@ public class SessionFactoryBuilder {
 
     private static SessionFactory sessionFactory;
 
-    public static SessionFactory getSessionFactory(){
+    public static SessionFactory getSessionFactory() {
 
-        if(sessionFactory == null){
+        if (sessionFactory == null) {
             new Configuration().configure("hibernate.cfg.xml").addAnnotatedClass(User.class).buildSessionFactory();
         }
         return sessionFactory;
     }
-    public static void closeSessionFactory(){
-        if(sessionFactory!= null){
+
+    public static void closeSessionFactory() {
+        if (sessionFactory != null) {
             sessionFactory.close();
         }
     }

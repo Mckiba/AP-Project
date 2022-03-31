@@ -1,13 +1,12 @@
 package model;
 
+import factories.SessionFactoryBuilder;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import factories.SessionFactoryBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -20,19 +19,19 @@ public class User implements Serializable {
     @Id
     protected String customerID;
 
-    @Column(name="full_name")
+    @Column(name = "full_name")
     protected String fullName;
 
-    @Column(name="email")
+    @Column(name = "email")
     protected String email;
 
-    @Column(name="contact")
+    @Column(name = "contact")
     protected String contact;
 
-    @Column(name="password")
+    @Column(name = "password")
     protected String password;
 
-    @Column(name="accountType")
+    @Column(name = "accountType")
     protected String accountType;
 
     public User(String customerID, String fullName, String email, String contact, String password, String accouuntType) {
@@ -44,7 +43,7 @@ public class User implements Serializable {
         this.accountType = accouuntType;
     }
 
-    public User( String email, String password, String accountType) {
+    public User(String email, String password, String accountType) {
         this.email = email;
         this.password = password;
         this.accountType = accountType;
@@ -119,13 +118,14 @@ public class User implements Serializable {
         Session session = SessionFactoryBuilder.getSessionFactory().getCurrentSession();
         Transaction transaction = session.beginTransaction();
         session.save(this);
-        transaction. commit();
+        transaction.commit();
         session.close();
     }
+
     public void update() {
         Session session = SessionFactoryBuilder.getSessionFactory().getCurrentSession();
         Transaction transaction = session.beginTransaction();
-        User user = (User) session.get(User.class,this.customerID);
+        User user = (User) session.get(User.class, this.customerID);
         user.setFullName(this.fullName);
         session.update(user);
         transaction.commit();
@@ -135,7 +135,7 @@ public class User implements Serializable {
     public void delete() {
         Session session = SessionFactoryBuilder.getSessionFactory().getCurrentSession();
         Transaction transaction = session.beginTransaction();
-        User user = (User) session.get(User.class, this.customerID) ;
+        User user = (User) session.get(User.class, this.customerID);
         session.delete(user);
         transaction.commit();
         session.close();
