@@ -1,9 +1,9 @@
 package services;
 
+import model.Complaints;
 import model.User;
 
 public class UserOperation {
-    //private static final Logger logger = LogManager.getLogger(UserOperation.class);
 
 
     public static boolean loginAuth(User user) {
@@ -15,4 +15,5 @@ public class UserOperation {
         return false;
 
     }
+
 }

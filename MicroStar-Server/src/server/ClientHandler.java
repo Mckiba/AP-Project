@@ -1,6 +1,8 @@
 package server;
 
+import model.Complaints;
 import model.User;
+import services.ComplaintOperations;
 import services.UserOperation;
 
 import java.io.EOFException;
@@ -15,8 +17,8 @@ public class ClientHandler implements Runnable {
 
     private static Connection dBConn = null;
     Socket clientSocket;
-    ObjectOutputStream dos;
-    ObjectInputStream dis;
+    ObjectOutputStream Oos;
+    ObjectInputStream Ois;
     User user;
 
 
@@ -30,30 +32,45 @@ public class ClientHandler implements Runnable {
         while (true) {
 
             try {
-                dos = new ObjectOutputStream(clientSocket.getOutputStream());
-                dis = new ObjectInputStream(clientSocket.getInputStream());
+                Oos = new ObjectOutputStream(clientSocket.getOutputStream());
+                Ois = new ObjectInputStream(clientSocket.getInputStream());
 
                 String action = "";
                 //getDatabaseConnection();
                 try {
                     while (true) {
                         {
-                            action = (String) dis.readObject();
-                            user = (User) (dis.readObject());
+                            action = (String) Ois.readObject();
+                            Object operand = Ois.readObject();
+
                             switch (action) {
                                 case "AUTHENTICATE" -> {
+                                    User user = (User) operand;
                                     System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
                                     System.out.println(user.getEmail());
                                     boolean userAuthenticated = UserOperation.loginAuth(user);
                                     if (userAuthenticated) {
                                         System.out.println("USER AUTHENTICATED" + true);
-                                        dos.writeObject(true);
-                                        dos.writeObject(user);
-                                    } else dos.writeObject(false);
+                                        Oos.writeObject(true);
+                                        Oos.writeObject(user);
+                                    } else Oos.writeObject(false);
                                 }
-                                case "LOG-OFF" ->
-                                        //TODO:HANDLE LOGOFF
-                                        System.out.println("LOG OFF");//handleLogOff();
+                                case "LOG-OFF" -> {
+                                    //TODO:HANDLE LOGOFF
+                                    System.out.println("LOG OFF");//handleLogOff();
+                                }
+
+                                case "ADD-COMPLAINT" -> {
+                                    Complaints complaint = (Complaints) operand;
+                                    System.out.println("ADD COMPLAINT");
+                                    System.out.println("ID: "+ complaint.getCustomerID() +" COMPLAINT: "+ complaint.getIssueDetails());
+                                    boolean complaintRecorded = ComplaintOperations.addComplaint(complaint);
+                                    if(complaintRecorded){
+                                        System.out.println("COMPLAINT RECORDED" + true);
+                                        Oos.writeObject(true);
+                                    }else Oos.writeObject(false);
+                                }
+
                             }
                         }
                     }

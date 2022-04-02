@@ -26,19 +26,22 @@ CREATE TABLE `Technician` (
 );
 
 CREATE TABLE `complaints` (
-  `id` int PRIMARY KEY,
+  `complaintsID` int PRIMARY KEY,
   `category` varchar(255),
   `response` varchar(255),
+  `customerID` varchar(255),
   `response_provider` varchar(255),
   `response_date` datetime,
   `issue_type` varchar(255),
   `issue_details` varchar(255)
 );
 
+
+
 CREATE TABLE `accounts` (
   `account_id` int PRIMARY KEY,
   `payment_status` varchar(255),
-  `amount_due` float8,
+  `amount_due` float,
   `payment_due_date` datetime,
   `status` varchar(255),
   `created_at` datetime DEFAULT (now())

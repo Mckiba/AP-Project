@@ -9,17 +9,15 @@ public class Customer implements Serializable {
     protected String email;
     protected String contact;
     protected String serviceAddress;
-    protected String complaintCode;
     protected int accountNumber;
     protected String password;
 
-    public Customer(int customerID, String fullName, String email, String contact, String serviceAddress, String complaintCode, int accountNumber, String password) {
+    public Customer(int customerID, String fullName, String email, String contact, String serviceAddress, int accountNumber, String password) {
         this.customerID = customerID;
         this.fullName = fullName;
         this.email = email;
         this.contact = contact;
         this.serviceAddress = serviceAddress;
-        this.complaintCode = complaintCode;
         this.accountNumber = accountNumber;
         this.password = password;
     }
@@ -35,7 +33,6 @@ public class Customer implements Serializable {
         this.email = c.email;
         this.contact = c.contact;
         this.serviceAddress = c.serviceAddress;
-        this.complaintCode = c.complaintCode;
         this.accountNumber = c.accountNumber;
         this.password = c.password;
     }
@@ -46,7 +43,6 @@ public class Customer implements Serializable {
         this.email = "email";
         this.contact = "contact";
         this.serviceAddress = "serviceAddress";
-        this.complaintCode = "complaintCode";
         this.accountNumber = 100032;
         this.password = "password";
     }
@@ -91,14 +87,6 @@ public class Customer implements Serializable {
         this.serviceAddress = serviceAddress;
     }
 
-    public String getComplaintCode() {
-        return complaintCode;
-    }
-
-    public void setComplaintCode(String complaintCode) {
-        this.complaintCode = complaintCode;
-    }
-
     public int getAccountNumber() {
         return accountNumber;
     }
@@ -123,7 +111,6 @@ public class Customer implements Serializable {
                 "Email: " + email + '\'' +
                 "Contact: " + contact + '\'' +
                 "ServiceAddress: " + serviceAddress + '\'' +
-                "ComplaintCode: " + complaintCode + '\'' +
                 "AccountNumber: " + accountNumber +
                 "Password: " + password + '\''
                 ;
