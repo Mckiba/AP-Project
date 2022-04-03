@@ -52,3 +52,6 @@ ALTER TABLE `Customers` ADD FOREIGN KEY (`complaint_code`) REFERENCES `complaint
 ALTER TABLE `accounts` ADD FOREIGN KEY (`account_id`) REFERENCES `Customers` (`account_number`);
 
 ALTER TABLE `complaints` ADD FOREIGN KEY (`response_provider`) REFERENCES `Technician` (`staff_id`);
+
+
+ALTER TABLE `accounts` DROP COLUMN `status`;

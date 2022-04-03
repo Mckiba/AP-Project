@@ -2,20 +2,41 @@ package model;
 
 //import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
+
+@Entity
+@Table(name = "Accounts")
 public class Accounts implements Serializable {
 
     private static final long serialVersionUID = -6631284529858975607L;
 
+    @Id
+    @Column(name = "account_id")
     protected String customerID;
-    String paymentStatus;
-    double amountDue;
-    Date paymentDate;
-    Date createdAt;
 
-    public Accounts(String customerID, String paymentStatus, double amountDue, Date paymentDate, Date createdAt) {
+    @Column(name = "payment_status")
+    String paymentStatus;
+
+    @Column(name = "amount_due")
+    double amountDue;
+
+    @Column(name = "payment_due_date")
+    java.util.Date paymentDate;
+
+
+    //TODO: DELETE STATUS FROM TABLE
+
+    @Column(name = "created_at")
+    java.util.Date createdAt;
+
+
+    public Accounts(String customerID, String paymentStatus, double amountDue, java.util.Date paymentDate, java.util.Date createdAt) {
         this.customerID = customerID;
         this.paymentStatus = paymentStatus;
         this.amountDue = amountDue;
@@ -60,19 +81,31 @@ public class Accounts implements Serializable {
         this.amountDue = amountDue;
     }
 
-    public Date getPaymentDate() {
+    public java.util.Date getPaymentDate() {
         return paymentDate;
     }
 
-    public void setPaymentDate(Date paymentDate) {
+    public void setPaymentDate(java.util.Date paymentDate) {
         this.paymentDate = paymentDate;
     }
 
-    public Date getCreatedAt() {
+    public java.util.Date getCreatedAt() {
         return createdAt;
     }
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+
+    @Override
+    public String toString() {
+        return "Accounts{" +
+                "customerID='" + customerID + '\'' +
+                ", paymentStatus='" + paymentStatus + '\'' +
+                ", amountDue=" + amountDue +
+                ", paymentDate=" + paymentDate +
+                ", createdAt=" + createdAt +
+                '}';
+    }
 }
+

@@ -19,10 +19,6 @@ public class LoginAuth {
             System.out.println("GET USER INFO" + user.getPassword() + user.getCustomerID());
             return loginCustomer(user.getCustomerID(), user.getPassword());
         }
-        if (userType.equals("CUSTOMER")) {
-            System.out.println("GET USER INFO" + user.getPassword() + user.getCustomerID());
-            return loginCustomer(user.getCustomerID(), user.getPassword());
-        }
         return false;
     }
 

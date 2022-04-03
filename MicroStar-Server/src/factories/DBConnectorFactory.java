@@ -6,10 +6,13 @@ import java.sql.SQLException;
 
 public class DBConnectorFactory {
 
-    private static java.sql.Connection con = null;
 
 
     public static Connection getDatabaseConnection() throws SQLException {
+
+         java.sql.Connection con = null;
+
+
         String url = "jdbc:mysql://localhost:3306/MicroStar";
 
         if (con == null) {

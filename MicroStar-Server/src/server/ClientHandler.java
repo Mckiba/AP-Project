@@ -1,7 +1,9 @@
 package server;
 
+import model.Accounts;
 import model.Complaints;
 import model.User;
+import services.AccountOperations;
 import services.ComplaintOperations;
 import services.UserOperation;
 
@@ -70,7 +72,14 @@ public class ClientHandler implements Runnable {
                                         Oos.writeObject(true);
                                     }else Oos.writeObject(false);
                                 }
-
+                                case "ACCOUNT-QUERY" -> {
+                                    User user = (User) operand;
+                                    System.out.println("QUERY");
+                                    System.out.println(user.getCustomerID());
+                                    Accounts account = AccountOperations.queryAccount(user);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(account);
+                                }
                             }
                         }
                     }

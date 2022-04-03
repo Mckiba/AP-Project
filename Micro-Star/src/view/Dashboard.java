@@ -18,6 +18,7 @@ import java.util.Date;
 
 public class Dashboard extends JFrame implements ActionListener{
 
+    User globalUser;
 
     JFrame frame = new JFrame("Micro Star Cable company");
     JPanel head = new JPanel();
@@ -44,6 +45,7 @@ public class Dashboard extends JFrame implements ActionListener{
 
 
     public Dashboard(User user) throws IOException {
+        globalUser = user;
         welcome.setText(user.getCustomerID());
         setLayoutManager();
         setTexts();
@@ -62,6 +64,7 @@ public class Dashboard extends JFrame implements ActionListener{
 
     private void addActionEvent() {
         submit.addActionListener( this);
+        status.addActionListener(this);
     }
 
     private void initializeComponent() {
@@ -103,35 +106,43 @@ public class Dashboard extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        //User user = null;
+        if (e.getSource() == submit ) {
+            try {
+                Client client = new Client();
+                if (e.getSource() == submit) {
+                    //ArrayList<String> complaint = new ArrayList<String>();
+                    //complaint.add(text.getText());
+                    Dashboard obj;
+                    Date date = new Date();
+                    String category = combobox.getSelectedItem().toString();
+                    String complaintText = text.getText();
+                    String userID = welcome.getText();
 
-        try {
-            Client client = new Client();
-            if (e.getSource() == submit){
-                //ArrayList<String> complaint = new ArrayList<String>();
-                //complaint.add(text.getText());
-                Dashboard obj;
-                Date date = new Date();
-                String category = combobox.getSelectedItem().toString();
-                String complaintText = text.getText();
-                String userID = welcome.getText();
+                    Complaints complaint = new Complaints("10004", userID, category, "", "", date, complaintText);
+                    client.sendAction("ADD-COMPLAINT");
 
-                Complaints complaint = new Complaints("10004", userID, category,"","",date,complaintText);
-                client.sendAction("ADD-COMPLAINT");
+                    client.sendComplaint(complaint);
+                    client.receiveResponse();
 
-                client.sendComplaint(complaint);
-                client.receiveResponse();
-
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
-
-
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
 
-
-
+        if (e.getSource() == status){
+            System.out.println("ACCOUNT STATUS");
+            try {
+                Client client = new Client();
+                if (e.getSource() == status) {
+                    Dashboard obj;
+                    client.sendAction("ACCOUNT-QUERY");
+                    client.sendUser(globalUser);
+                    client.receiveResponse();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 }

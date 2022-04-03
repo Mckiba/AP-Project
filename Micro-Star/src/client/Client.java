@@ -1,7 +1,9 @@
 package client;
 
+import model.Accounts;
 import model.Complaints;
 import model.User;
+import view.AccountQuery;
 import view.Dashboard;
 import view.UserLogin;
 
@@ -11,6 +13,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+
+import static java.awt.SystemColor.window;
 
 public class Client {
 
@@ -87,6 +91,15 @@ public class Client {
         }
     }
 
+    public void sendAccount(Accounts accountsObj) {
+        this.action = action;
+        try {
+            objOs.writeObject(accountsObj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void receiveResponse() {
         try {
             if (action.equalsIgnoreCase("AUTHENTICATE")) {
@@ -114,6 +127,19 @@ public class Client {
                     userLogin.setVisible(false);
                    }else{
                     JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
+                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                Accounts accounts = (Accounts) obIs.readObject();
+
+                if (flag) {
+
+                    AccountQuery accountQuery = new AccountQuery(accounts);
+                    accountQuery.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(null, "FAILED TO GET ACCOUNT DETAILS",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
