@@ -2,59 +2,54 @@ package model;
 
 //import java.util.Date;
 
-public class Accounts {
-    protected int customerID;
-    String paymentstatus;
+import java.io.Serializable;
+import java.util.Date;
+
+public class Accounts implements Serializable {
+
+    private static final long serialVersionUID = -6631284529858975607L;
+
+    protected String customerID;
+    String paymentStatus;
     double amountDue;
-    date paymentdate;
-    boolean productStatus;
-    date createdAt;
+    Date paymentDate;
+    Date createdAt;
 
-    public Accounts(int customerID, String paymentstatus, double amountDue, date paymentdate, boolean productStatus, date createdAt) {
+    public Accounts(String customerID, String paymentStatus, double amountDue, Date paymentDate, Date createdAt) {
         this.customerID = customerID;
-        this.paymentstatus = paymentstatus;
+        this.paymentStatus = paymentStatus;
         this.amountDue = amountDue;
-        this.paymentdate = paymentdate;
-        this.productStatus = productStatus;
+        this.paymentDate = paymentDate;
         this.createdAt = createdAt;
-
     }
+
 
     public Accounts(Accounts a) {
         this.customerID = a.customerID;
-        this.paymentstatus = a.paymentstatus;
+        this.paymentStatus = a.paymentStatus;
         this.amountDue = a.amountDue;
-        this.paymentdate = a.paymentdate;
-        this.productStatus = a.productStatus;
-        this.paymentdate = a.paymentdate;
-        this.productStatus = a.productStatus;
+        this.paymentDate = a.paymentDate;
         this.createdAt = a.createdAt;
     }
 
     public Accounts() {
-        this.customerID = 1234;
-        this.paymentstatus = "Paid";
-        this.amountDue = 100.05;
-        this.paymentdate = date.now;
-        this.productStatus = true;
-        this.createdAt = date.now;
 
     }
 
-    public int getCustomerID() {
+    public String getCustomerID() {
         return customerID;
     }
 
-    public void setCustomerID(int customerID) {
+    public void setCustomerID(String customerID) {
         this.customerID = customerID;
     }
 
-    public String getPaymentstatus() {
-        return paymentstatus;
+    public String getPaymentStatus() {
+        return paymentStatus;
     }
 
-    public void setPaymentstatus(String paymentstatus) {
-        this.paymentstatus = paymentstatus;
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 
     public double getAmountDue() {
@@ -65,36 +60,19 @@ public class Accounts {
         this.amountDue = amountDue;
     }
 
-    public date getPaymentdate() {
-        return paymentdate;
+    public Date getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setPaymentdate(date paymentdate) {
-        this.paymentdate = paymentdate;
+    public void setPaymentDate(Date paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
-    public boolean isProductStatus() {
-        return productStatus;
-    }
-
-    public void setProductStatus(boolean productStatus) {
-        this.productStatus = productStatus;
-    }
-
-    public date getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(date createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
-    @Override
-    public String toString() {
-        return "Accounts{" +
-                "customerID:" + customerID + ",Payment Status:" + paymentstatus +
-                ",Amount Due:" + amountDue + ",Payment Date:" + paymentdate + ",Product Status" + productStatus +
-                ",Created At" + createdAt;
-    }
-
 }
