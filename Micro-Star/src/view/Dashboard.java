@@ -1,17 +1,23 @@
 package view;
 
+import client.Client;
+import model.Complaints;
 import model.User;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 
 
-public class Dashboard {
+public class Dashboard extends JFrame implements ActionListener{
 
-    User user;
 
     JFrame frame = new JFrame("Micro Star Cable company");
     JPanel head = new JPanel();
@@ -22,7 +28,7 @@ public class Dashboard {
     BufferedImage bufferedImage = ImageIO.read(this.getClass().getResource("/MicroStar.png"));
     Image image = bufferedImage.getScaledInstance(90, 90, Image.SCALE_DEFAULT);
 
-    JButton status = new JButton("View Account Status");
+    JButton status = new JButton("View AccountQuery Status");
     JButton lastPay = new JButton("View Last Payment");
     JButton viewComp = new JButton("View complaints");
     JButton viewAllPay = new JButton("View all Payments");
@@ -38,7 +44,7 @@ public class Dashboard {
 
 
     public Dashboard(User user) throws IOException {
-        welcome.setText("WELCOME USER: " + user.getCustomerID());
+        welcome.setText(user.getCustomerID());
         setLayoutManager();
         setTexts();
         setLocationAndSize();
@@ -55,6 +61,7 @@ public class Dashboard {
     }
 
     private void addActionEvent() {
+        submit.addActionListener( this);
     }
 
     private void initializeComponent() {
@@ -91,5 +98,40 @@ public class Dashboard {
     private void setLayoutManager() {
         frame.setLayout(null);
         ComboPanel.setLayout(new FlowLayout());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        //User user = null;
+
+        try {
+            Client client = new Client();
+            if (e.getSource() == submit){
+                //ArrayList<String> complaint = new ArrayList<String>();
+                //complaint.add(text.getText());
+                Dashboard obj;
+                Date date = new Date();
+                String category = combobox.getSelectedItem().toString();
+                String complaintText = text.getText();
+                String userID = welcome.getText();
+
+                Complaints complaint = new Complaints("10004", userID, category,"","",date,complaintText);
+                client.sendAction("ADD-COMPLAINT");
+
+                client.sendComplaint(complaint);
+                client.receiveResponse();
+
+            }
+
+
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+
+
     }
 }

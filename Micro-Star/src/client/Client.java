@@ -1,8 +1,9 @@
 package client;
 
+import model.Complaints;
 import model.User;
-import view.UserLogin;
 import view.Dashboard;
+import view.UserLogin;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -68,6 +69,15 @@ public class Client {
 
     }
 
+    public void sendComplaint(Complaints complaintObj) {
+        this.action = action;
+        try {
+            objOs.writeObject(complaintObj);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendUser(User userObj) {
         this.action = action;
         try {
@@ -96,6 +106,17 @@ public class Client {
                     System.out.println("LOGGING OGG");
                 }
             }
+            if (action.equalsIgnoreCase("ADD-COMPLAINT")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                if (flag) {
+                    JOptionPane.showMessageDialog(null, "COMPLAINT RECORDED",
+                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                    userLogin.setVisible(false);
+                   }else{
+                    JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
+                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         } catch (ClassCastException | ClassNotFoundException | IOException ex) {
             ex.printStackTrace();
         }
@@ -110,10 +131,7 @@ public class Client {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
-
         return result;
-
     }
 
 
