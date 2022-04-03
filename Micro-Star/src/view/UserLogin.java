@@ -45,7 +45,7 @@ public class UserLogin extends JFrame implements ActionListener {
 
     public void setTexts(){
         jRadioButton1.setText("CUSTOMER");
-        jRadioButton2.setText("AGENT");
+        jRadioButton2.setText("REP");
         jRadioButton3.setText("TECHNICIAN");
 
     }
@@ -119,7 +119,7 @@ public class UserLogin extends JFrame implements ActionListener {
                 type = "CUSTOMER";
             }
             else if (jRadioButton2.isSelected()) {
-                type = "AGENT";
+                type = "REP";
             } else if (jRadioButton3.isSelected()){
                 type = "TECHNICIAN";
             }
