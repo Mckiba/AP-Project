@@ -1,14 +1,14 @@
 package model;
 
 public class CustomerRep {
-    int repId;
+    String repId;
     String fullName;
     String email;
     int complaintCode;
     String password;
 
     public CustomerRep() {
-        this.repId = 1001;
+        this.repId = "1001";
         this.fullName = "Jane Doe";
         this.email = "doeJane2@gmail.com";
         this.complaintCode = 1080;
@@ -32,11 +32,11 @@ public class CustomerRep {
         this.password = c.password;
     }
 
-    public int getRepId() {
+    public String getRepId() {
         return repId;
     }
 
-    public void setRepId(int repId) {
+    public void setRepId(String repId) {
         this.repId = repId;
     }
 
