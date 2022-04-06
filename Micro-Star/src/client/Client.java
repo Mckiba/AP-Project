@@ -3,9 +3,7 @@ package client;
 import model.Accounts;
 import model.Complaints;
 import model.User;
-import view.AccountQuery;
-import view.Dashboard;
-import view.UserLogin;
+import view.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -18,13 +16,17 @@ import static java.awt.SystemColor.window;
 
 public class Client {
 
-    static UserLogin userLogin;
+    static Login login;
     static Dashboard dashboard;
+    public static ArrayList<Complaints> complaintsArrayList = null;
+
 
     public static void main(String[] args) throws IOException {
-        userLogin = new UserLogin();
+        login = new Login();
+        login.setVisible(true);
        // dashboard = new Dashboard(user);
     }
+
     private ObjectOutputStream objOs;
     private ObjectInputStream obIs;
     private String action;
@@ -53,6 +55,8 @@ public class Client {
         }
     }
 
+    //TODO: SEND ISSUE ID AND RESPONSE TO THE SERVER
+    //TODO: THEN
     public void closeConnection() {
         try {
             objOs.close();
@@ -105,12 +109,19 @@ public class Client {
             if (action.equalsIgnoreCase("AUTHENTICATE")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 User user = (User) obIs.readObject();
-
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "LOGIN successfully",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
-                            userLogin.setVisible(false);
-                            new Dashboard(user);
+                            login.setVisible(false);
+                            switch (user.getAccountType()){
+                                case  "CUSTOMER" -> {
+                                    new Dashboard(user);
+                                }
+                                case  "REP", "TECHNICIAN" -> {
+                                    RepTechDashboard repTechDashboard = new RepTechDashboard(user);//new RepTechDashboard(user);
+                                    repTechDashboard.setVisible(true);
+                                }
+                            }
                 }else{
                     JOptionPane.showMessageDialog(null, "LOGIN FAILED",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
@@ -124,10 +135,18 @@ public class Client {
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "COMPLAINT RECORDED",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
-                    userLogin.setVisible(false);
+                    login.setVisible(false);
                    }else{
                     JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
+                if (flag) {
+                    complaintsArrayList = complaints;
+                    System.out.println(complaints);
                 }
             }
             if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {
@@ -135,7 +154,6 @@ public class Client {
                 Accounts accounts = (Accounts) obIs.readObject();
 
                 if (flag) {
-
                     AccountQuery accountQuery = new AccountQuery(accounts);
                     accountQuery.setVisible(true);
                 }else{

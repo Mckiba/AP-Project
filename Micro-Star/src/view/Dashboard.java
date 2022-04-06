@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 
 public class Dashboard extends JFrame implements ActionListener{
@@ -110,20 +111,17 @@ public class Dashboard extends JFrame implements ActionListener{
             try {
                 Client client = new Client();
                 if (e.getSource() == submit) {
-                    //ArrayList<String> complaint = new ArrayList<String>();
-                    //complaint.add(text.getText());
-                    Dashboard obj;
                     Date date = new Date();
                     String category = combobox.getSelectedItem().toString();
                     String complaintText = text.getText();
                     String userID = welcome.getText();
+                    Random random = new Random();
+                    String id = String.format("%04d", random.nextInt(10000));
 
-                    Complaints complaint = new Complaints("10004", userID, category, "", "", date, complaintText);
+                    Complaints complaint = new Complaints(id, userID, category, "", "", date, complaintText);
                     client.sendAction("ADD-COMPLAINT");
-
                     client.sendComplaint(complaint);
                     client.receiveResponse();
-
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
