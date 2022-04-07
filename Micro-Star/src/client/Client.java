@@ -12,31 +12,25 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
-import static java.awt.SystemColor.window;
-
 public class Client {
 
+    public static ArrayList<Complaints> complaintsArrayList = null;
+    public static Complaints complaint = null;
     static Login login;
     static Dashboard dashboard;
-    public static ArrayList<Complaints> complaintsArrayList = null;
-    public static Complaints complaint  = null;
-
-
+    private ObjectOutputStream objOs;
+    private ObjectInputStream obIs;
+    private String action;
+    private Socket connectionSocket;
+    public Client() throws IOException {
+        this.createConnection();
+        this.configureStreams();
+    }
 
     public static void main(String[] args) throws IOException {
         login = new Login();
         login.setVisible(true);
         // dashboard = new Dashboard(user);
-    }
-
-    private ObjectOutputStream objOs;
-    private ObjectInputStream obIs;
-    private String action;
-    private Socket connectionSocket;
-
-    public Client() throws IOException {
-        this.createConnection();
-        this.configureStreams();
     }
 
     private void createConnection() {
@@ -57,8 +51,7 @@ public class Client {
         }
     }
 
-    //TODO: SEND ISSUE ID AND RESPONSE TO THE SERVER
-    //TODO: THEN
+
     public void closeConnection() {
         try {
             objOs.close();
@@ -124,16 +117,20 @@ public class Client {
                     JOptionPane.showMessageDialog(null, "LOGIN successfully",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
                     login.setVisible(false);
-                    switch (user.getAccountType()){
-                        case  "CUSTOMER" -> {
+                    switch (user.getAccountType()) {
+                        case "CUSTOMER" -> {
                             new Dashboard(user);
                         }
-                        case  "REP", "TECHNICIAN" -> {
-                            RepTechDashboard repTechDashboard = new RepTechDashboard(user);//new RepTechDashboard(user);
-                            repTechDashboard.setVisible(true);
+                        case "REP" -> {
+                            NewRepDashboard repDashboard = new NewRepDashboard(user);//new RepDashboard(user);
+                            repDashboard.setVisible(true);
+                        }
+                    case "TECHNICIAN" -> {
+                            TechDashboard techDashboard = new TechDashboard(user);//new RepDashboard(user);
+                            techDashboard.setVisible(true);
                         }
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "LOGIN FAILED",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -147,7 +144,7 @@ public class Client {
                     JOptionPane.showMessageDialog(null, "COMPLAINT RECORDED",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                     login.setVisible(false);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -175,9 +172,19 @@ public class Client {
                 if (flag) {
                     AccountQuery accountQuery = new AccountQuery(accounts);
                     accountQuery.setVisible(true);
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "FAILED TO GET ACCOUNT DETAILS",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+            if (action.equalsIgnoreCase("ADD-RESPONSE")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                if (flag) {
+                    JOptionPane.showMessageDialog(null, "RESPONSE RECORDED",
+                            "RESPONSE", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "FAILED TO PROVIDE RESPONSE",
+                            "RESPONSE", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (ClassCastException | ClassNotFoundException | IOException ex) {
@@ -185,17 +192,15 @@ public class Client {
         }
     }
 
-    public Object doOperation(ArrayList<Object> operand) {
-        Object result = null;
 
+    public void sendObject(ArrayList<Object> object) {
         try {
-            objOs.writeObject(operand);
-            result = obIs.readObject();
-        } catch (IOException | ClassNotFoundException e) {
+            objOs.writeObject(object);
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return result;
     }
+
 
 
 }

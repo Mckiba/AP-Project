@@ -96,6 +96,19 @@ public class ClientHandler implements Runnable {
                                     Oos.writeObject(complaint);
                                     System.out.println("FILTER COMPLAINTS" + complaint.toString());
                                 }
+                                case "ADD-RESPONSE" -> {
+                                    //TODO: RENAME receivedOp
+
+                                    ArrayList<Object>receivedOp = (ArrayList<Object>) operand;
+
+                                    String issueID = (String) receivedOp.get(0).toString();
+                                    String userID = (String) receivedOp.get(1).toString();
+                                    String response = (String) receivedOp.get(2).toString();
+                                    boolean complaintAdded = ComplaintOperations.addResponse(issueID,userID,response);
+                                    Oos.writeObject(complaintAdded);
+                                    //Oos.writeObject(complaint);
+                                    System.out.println("ADDED RESPONSE");
+                                }
                             }
                         }
                     }

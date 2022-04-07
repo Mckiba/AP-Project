@@ -7,12 +7,14 @@ import model.Complaints;
 import model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ComplaintOperations {
@@ -99,9 +101,27 @@ public class ComplaintOperations {
     }
 
 
+    public static boolean addResponse(String issueID,String userId ,String response) {
 
+        Date date = new Date(); // This object contains the current date value
 
+        try (Session session = SessionFactoryBuilder.getSessionFactory().openSession()) {
 
+            Transaction tx = session.beginTransaction();
+            Complaints complaints = session.load(Complaints.class, issueID);
+            complaints.setResponseProvider(userId);
+            complaints.setResponse(response);
+            complaints.setResponseDate(date);
+            session.update(complaints);
+            tx.commit();
+            session.close();
+            SessionFactoryBuilder.closeSessionFactory();
 
+            return true;
 
+        } catch (HibernateException hex) {
+            hex.printStackTrace();
+            return false;
+        }
+    }
 }

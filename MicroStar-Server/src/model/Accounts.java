@@ -30,8 +30,6 @@ public class Accounts implements Serializable {
     java.util.Date paymentDate;
 
 
-    //TODO: DELETE STATUS FROM TABLE
-
     @Column(name = "created_at")
     java.util.Date createdAt;
 
