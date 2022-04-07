@@ -124,4 +124,23 @@ public class ComplaintOperations {
             return false;
         }
     }
+
+    public static boolean assignTechnician(String issueID, String techID) {
+
+        try (Session session = SessionFactoryBuilder.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            Complaints complaints = session.load(Complaints.class, issueID);
+            complaints.setResponseProvider(techID);
+            session.update(complaints);
+            tx.commit();
+            session.close();
+            SessionFactoryBuilder.closeSessionFactory();
+            return true;
+        } catch (HibernateException hex) {
+            hex.printStackTrace();
+            return false;
+        }
+    }
+
+
 }

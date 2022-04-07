@@ -97,17 +97,25 @@ public class ClientHandler implements Runnable {
                                     System.out.println("FILTER COMPLAINTS" + complaint.toString());
                                 }
                                 case "ADD-RESPONSE" -> {
-                                    //TODO: RENAME receivedOp
+                                    ArrayList<Object>objects = (ArrayList<Object>) operand;
 
-                                    ArrayList<Object>receivedOp = (ArrayList<Object>) operand;
-
-                                    String issueID = (String) receivedOp.get(0).toString();
-                                    String userID = (String) receivedOp.get(1).toString();
-                                    String response = (String) receivedOp.get(2).toString();
+                                    String issueID = (String) objects.get(0).toString();
+                                    String userID = (String) objects.get(1).toString();
+                                    String response = (String) objects.get(2).toString();
                                     boolean complaintAdded = ComplaintOperations.addResponse(issueID,userID,response);
                                     Oos.writeObject(complaintAdded);
                                     //Oos.writeObject(complaint);
                                     System.out.println("ADDED RESPONSE");
+                                }
+                                case "ASSIGN-TECHNICIAN" -> {
+                                    ArrayList<Object>objects = (ArrayList<Object>) operand;
+
+                                    String issueID = (String) objects.get(0).toString();
+                                    String techID = (String) objects.get(1).toString();
+                                    boolean techAssigned = ComplaintOperations.assignTechnician(issueID,techID);
+                                    Oos.writeObject(techAssigned);
+                                    //Oos.writeObject(complaint);
+                                    System.out.println("ASSIGNED TECH");
                                 }
                             }
                         }
