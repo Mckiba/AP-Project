@@ -11,8 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import static java.awt.SystemColor.window;
+import java.util.List;
 
 public class Client {
 
@@ -154,7 +153,6 @@ public class Client {
             }
             if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
-                ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
                 if (flag) {
                     complaintsArrayList = complaints;
                     System.out.println(complaints);
@@ -164,20 +162,6 @@ public class Client {
                 Boolean flag = (Boolean) obIs.readObject();
                 Complaints complaints = (Complaints) obIs.readObject();
                 if (flag) {
-                    complaint = complaints;
-                    System.out.println(complaint);
-                }
-            }
-            if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {
-                Boolean flag = (Boolean) obIs.readObject();
-                Accounts accounts = (Accounts) obIs.readObject();
-
-                if (flag) {
-                    AccountQuery accountQuery = new AccountQuery(accounts);
-                    accountQuery.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(null, "FAILED TO GET ACCOUNT DETAILS",
-                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (ClassCastException | ClassNotFoundException | IOException ex) {
@@ -199,7 +183,6 @@ public class Client {
 
 
 }
-
 
 
 

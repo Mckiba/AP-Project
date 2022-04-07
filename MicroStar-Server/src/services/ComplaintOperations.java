@@ -13,7 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
+import java.util.List;
 
 public class ComplaintOperations {
 
@@ -35,7 +35,6 @@ public class ComplaintOperations {
             return false;
         }
     }
-
 
     public static ArrayList<Complaints> getAllComplaints() {
         ArrayList<Complaints> complaintList = new ArrayList<>();
