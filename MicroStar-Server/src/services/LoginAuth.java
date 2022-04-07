@@ -19,8 +19,6 @@ public class LoginAuth {
         System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
         ResultSet result = statement.executeQuery();
 
-        System.out.println("User Results Received");
-        System.out.println("USER RESULTS");
         System.out.println("Login User");
         return statement;
     }
@@ -52,12 +50,13 @@ public class LoginAuth {
             ResultSet result = statement.executeQuery();
             while (result.next()) {
                 ID = result.getString(1);
-                pass = result.getString(8);
+                pass = result.getString(5);
                 System.out.println("Technician ID: " + ID);
                 System.out.println("Tech PASS: " + pass);
-                if (ID.equals(userID) && pass.equals(password))
+                if (ID.equals(userID) && pass.equals(password)) {
+                    System.out.println("USER FOUND");
                     return true;
-                System.out.println("USER FOUND");
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
@@ -78,7 +77,7 @@ public class LoginAuth {
 
             while (result.next()) {
                 ID = result.getString(1);
-                pass = result.getString(8);
+                pass = result.getString(5);
                 System.out.println("REP ID: " + ID);
                 System.out.println("REP PASS: " + pass);
                 if (ID.equals(userID) && pass.equals(password))
@@ -106,9 +105,10 @@ public class LoginAuth {
                 pass = result.getString(8);
                 System.out.println("USER ID: " + ID);
                 System.out.println("USER PASS: " + pass);
-                if (ID.equals(userID) && pass.equals(password))
+                if (ID.equals(userID) && pass.equals(password)) {
+                    System.out.println("USER FOUND");
                     return true;
-                System.out.println("USER FOUND");
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
