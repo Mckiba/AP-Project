@@ -55,3 +55,7 @@ ALTER TABLE `complaints` ADD FOREIGN KEY (`response_provider`) REFERENCES `Techn
 
 
 ALTER TABLE `accounts` DROP COLUMN `status`;
+ALTER TABLE complaints
+    DROP COLUMN issue_type;
+
+SELECT * FROM complaints
