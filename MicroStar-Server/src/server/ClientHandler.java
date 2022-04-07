@@ -13,7 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class ClientHandler implements Runnable {
@@ -60,7 +60,7 @@ public class ClientHandler implements Runnable {
                                 }
                                 case "LOG-OFF" : {
                                     //TODO:HANDLE LOGOFF
-                                    System.out.println("LOG OFF");//handleLogOff();
+                                    System.out.println("LOG OFF");
                                 }
 
                                 case "ADD-COMPLAINT" : {
@@ -87,6 +87,21 @@ public class ClientHandler implements Runnable {
                                     Accounts account = AccountOperations.queryAccount(user);
                                     Oos.writeObject(true);
                                     Oos.writeObject(account);
+                                }
+                                case "GET-COMPLAINTS" -> {
+                                    User user = (User) operand;
+                                    System.out.println("GET COMPLAINTS IN A LIST ");
+                                    ArrayList<Complaints> complaints = ComplaintOperations.getAllComplaints();
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaints);
+                                    System.out.println("COMPLAINTS" + complaints.toString());
+                                }
+                                case "FILTER-COMPLAINTS" -> {
+                                    String issueID = (String) operand;
+                                    Complaints complaint = ComplaintOperations.getComplaint(issueID);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaint);
+                                    System.out.println("FILTER COMPLAINTS" + complaint.toString());
                                 }
                             }
                         }

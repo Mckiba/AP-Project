@@ -3,9 +3,7 @@ package client;
 import model.Accounts;
 import model.Complaints;
 import model.User;
-import view.AccountQuery;
-import view.Dashboard;
-import view.UserLogin;
+import view.*;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -17,15 +15,19 @@ import java.util.List;
 
 public class Client {
 
-    static UserLogin userLogin;
+    static Login login;
     static Dashboard dashboard;
+    public static ArrayList<Complaints> complaintsArrayList = null;
+    public static Complaints complaint  = null;
+
+
 
     public static void main(String[] args) throws IOException {
-        userLogin = new UserLogin();
-
-        User user = new User("qwe","123","test");
-        dashboard = new Dashboard(user);
+        login = new Login();
+        login.setVisible(true);
+        // dashboard = new Dashboard(user);
     }
+
     private ObjectOutputStream objOs;
     private ObjectInputStream obIs;
     private String action;
@@ -54,6 +56,8 @@ public class Client {
         }
     }
 
+    //TODO: SEND ISSUE ID AND RESPONSE TO THE SERVER
+    //TODO: THEN
     public void closeConnection() {
         try {
             objOs.close();
@@ -92,6 +96,15 @@ public class Client {
         }
     }
 
+    public void sendIssue(String customerID) {
+        this.action = action;
+        try {
+            objOs.writeObject(customerID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendAccount(Accounts accountsObj) {
         this.action = action;
         try {
@@ -106,12 +119,19 @@ public class Client {
             if (action.equalsIgnoreCase("AUTHENTICATE")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 User user = (User) obIs.readObject();
-
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "LOGIN successfully",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
-                            userLogin.setVisible(false);
+                    login.setVisible(false);
+                    switch (user.getAccountType()){
+                        case  "CUSTOMER" -> {
                             new Dashboard(user);
+                        }
+                        case  "REP", "TECHNICIAN" -> {
+                            RepTechDashboard repTechDashboard = new RepTechDashboard(user);//new RepTechDashboard(user);
+                            repTechDashboard.setVisible(true);
+                        }
+                    }
                 }else{
                     JOptionPane.showMessageDialog(null, "LOGIN FAILED",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
@@ -125,36 +145,23 @@ public class Client {
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "COMPLAINT RECORDED",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
-                    userLogin.setVisible(false);
-                   }else{
+                    login.setVisible(false);
+                }else{
                     JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
             if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
-                List<Complaints> complaintsList = (List<Complaints>) obIs.readObject();
-
                 if (flag) {
-
-//                    AccountQuery accountQuery = new AccountQuery(accounts);
-//                    accountQuery.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(null, "FAILED TO GET Complaints",
-                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                    complaintsArrayList = complaints;
+                    System.out.println(complaints);
                 }
             }
-            if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {
+            if (action.equalsIgnoreCase("FILTER-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
-                Accounts accounts = (Accounts) obIs.readObject();
-
+                Complaints complaints = (Complaints) obIs.readObject();
                 if (flag) {
-
-                    AccountQuery accountQuery = new AccountQuery(accounts);
-                    accountQuery.setVisible(true);
-                }else{
-                    JOptionPane.showMessageDialog(null, "FAILED TO GET ACCOUNT DETAILS",
-                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         } catch (ClassCastException | ClassNotFoundException | IOException ex) {

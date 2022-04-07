@@ -19,64 +19,88 @@ public class ComplaintOperations {
 
 
     public static boolean addComplaint(Complaints complaint) {
-
         try (Session session = SessionFactoryBuilder.getSessionFactory().openSession()) {
-
             session.beginTransaction();
-
             Complaints complaints = new Complaints();
             complaints.setId(complaint.getId());
             complaints.setCategory(complaint.getCategory());
             complaints.setCustomerID(complaint.getCustomerID());
             complaints.setIssueDetails(complaint.getIssueDetails());
-
-
             session.save(complaints);
             session.getTransaction().commit();
             SessionFactoryBuilder.closeSessionFactory();
-            return  true;
-        }catch(HibernateException hex) {
+            return true;
+        } catch (HibernateException hex) {
             hex.printStackTrace();
             return false;
         }
     }
 
-    public static List<Complaints> queryComplaints(User userObj){
+    public static ArrayList<Complaints> getAllComplaints() {
+        ArrayList<Complaints> complaintList = new ArrayList<>();
+        String loginSql = "SELECT * FROM complaints";
+        try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()) {
+            PreparedStatement statement = dbConn.prepareStatement(loginSql);
+            System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
+            ResultSet rst = statement.executeQuery();
 
-        List<Complaints> complaintsList = new ArrayList<Complaints>();
+            while (rst.next()) {
+                Complaints customer = new Complaints(rst.getString("complaintsID"),
+                        rst.getString("customerID"), rst.getString("category"),
+                        rst.getString("response"), rst.getString("response_provider"),
+                        rst.getDate("response_date"), rst.getString("issue_Details"));
+                complaintList.add(customer);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error(" + e.getErrorCode()
+                    + ") " + e.getMessage());
+            e.printStackTrace();
+        }
+        return complaintList;
+    }
 
-        String sql = "SELECT * FROM MicroStar.complaints WHERE customerID = ?";
+
+
+    public static Complaints getComplaint(String issueID) {
+
+        Complaints complaint = new Complaints();
+
+        String sql = "SELECT * FROM MicroStar.complaints WHERE complaintsID = ?";
 
         try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()){
 
             PreparedStatement statement = dbConn.prepareStatement(sql);
-            statement.setString(1, userObj.getCustomerID());
+            statement.setString(1, issueID);
 
             System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
             ResultSet result = statement.executeQuery();
 
             while(result.next()) {
-                Complaints complaint = new Complaints();
-
-                complaint.setId(result.getString(1));
-                complaint.setCustomerID(result.getString(2));
-                complaint.setCategory(result.getString(3));
-                complaint.setResponse(result.getString(4));
+                complaint.setId((result.getString(1)));
+                complaint.setCategory(result.getString(2));
+                complaint.setResponse(result.getString(3));
+                complaint.setCustomerID(result.getString(4));
                 complaint.setResponseProvider(result.getString(5));
                 complaint.setResponseDate(result.getDate(6));
                 complaint.setIssueDetails(result.getString(7));
-                complaintsList.add(complaint);
+
+                break;
             }
 
-            System.out.println(complaintsList.toString());
+            System.out.println(complaint.toString());
 
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
                     + ") " + e.getMessage());
         }
 
-        return complaintsList;
+        return complaint;
     }
+
+
+
+
+
 
 
 }
