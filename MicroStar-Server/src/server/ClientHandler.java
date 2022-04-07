@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
+import java.util.List;
 
 
 public class ClientHandler implements Runnable {
@@ -46,7 +47,7 @@ public class ClientHandler implements Runnable {
                             Object operand = Ois.readObject();
 
                             switch (action) {
-                                case "AUTHENTICATE" -> {
+                                case "AUTHENTICATE": {
                                     User user = (User) operand;
                                     System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
                                     System.out.println(user.getEmail());
@@ -57,12 +58,12 @@ public class ClientHandler implements Runnable {
                                         Oos.writeObject(user);
                                     } else Oos.writeObject(false);
                                 }
-                                case "LOG-OFF" -> {
+                                case "LOG-OFF" : {
                                     //TODO:HANDLE LOGOFF
                                     System.out.println("LOG OFF");//handleLogOff();
                                 }
 
-                                case "ADD-COMPLAINT" -> {
+                                case "ADD-COMPLAINT" : {
                                     Complaints complaint = (Complaints) operand;
                                     System.out.println("ADD COMPLAINT");
                                     System.out.println("ID: "+ complaint.getCustomerID() +" COMPLAINT: "+ complaint.getIssueDetails());
@@ -72,7 +73,14 @@ public class ClientHandler implements Runnable {
                                         Oos.writeObject(true);
                                     }else Oos.writeObject(false);
                                 }
-                                case "ACCOUNT-QUERY" -> {
+                                case "GET-COMPLAINTS" : {
+                                    User user = (User) operand;
+                                    System.out.println("GET COMPLAINT");
+                                    List<Complaints> complaintRecorded = ComplaintOperations.queryComplaints(user);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaintRecorded);
+                                }
+                                case "ACCOUNT-QUERY" : {
                                     User user = (User) operand;
                                     System.out.println("QUERY");
                                     System.out.println(user.getCustomerID());
@@ -95,4 +103,3 @@ public class ClientHandler implements Runnable {
         }
     }
 }
-

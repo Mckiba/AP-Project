@@ -13,8 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-
-import static java.awt.SystemColor.window;
+import java.util.List;
 
 public class Client {
 
@@ -23,7 +22,9 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         userLogin = new UserLogin();
-       // dashboard = new Dashboard(user);
+
+        User user = new User("qwe","123","test");
+        dashboard = new Dashboard(user);
     }
     private ObjectOutputStream objOs;
     private ObjectInputStream obIs;
@@ -130,6 +131,19 @@ public class Client {
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
+            if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                List<Complaints> complaintsList = (List<Complaints>) obIs.readObject();
+
+                if (flag) {
+
+//                    AccountQuery accountQuery = new AccountQuery(accounts);
+//                    accountQuery.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(null, "FAILED TO GET Complaints",
+                            "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
             if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 Accounts accounts = (Accounts) obIs.readObject();
@@ -162,7 +176,6 @@ public class Client {
 
 
 }
-
 
 
 
