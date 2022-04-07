@@ -107,7 +107,8 @@ public class RepTechDashboard extends javax.swing.JFrame {
         jButton2.setText("Respond to Issue");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton2MouseClicked(evt);
+                ResponseScreen responseScreen = new ResponseScreen(globalUser);
+                responseScreen.setVisible(true);
             }
         });
         jButton2.addActionListener(new java.awt.event.ActionListener() {

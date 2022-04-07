@@ -19,12 +19,14 @@ public class Client {
     static Login login;
     static Dashboard dashboard;
     public static ArrayList<Complaints> complaintsArrayList = null;
+    public static Complaints complaint  = null;
+
 
 
     public static void main(String[] args) throws IOException {
         login = new Login();
         login.setVisible(true);
-       // dashboard = new Dashboard(user);
+        // dashboard = new Dashboard(user);
     }
 
     private ObjectOutputStream objOs;
@@ -95,6 +97,15 @@ public class Client {
         }
     }
 
+    public void sendIssue(String customerID) {
+        this.action = action;
+        try {
+            objOs.writeObject(customerID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void sendAccount(Accounts accountsObj) {
         this.action = action;
         try {
@@ -112,16 +123,16 @@ public class Client {
                 if (flag) {
                     JOptionPane.showMessageDialog(null, "LOGIN successfully",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
-                            login.setVisible(false);
-                            switch (user.getAccountType()){
-                                case  "CUSTOMER" -> {
-                                    new Dashboard(user);
-                                }
-                                case  "REP", "TECHNICIAN" -> {
-                                    RepTechDashboard repTechDashboard = new RepTechDashboard(user);//new RepTechDashboard(user);
-                                    repTechDashboard.setVisible(true);
-                                }
-                            }
+                    login.setVisible(false);
+                    switch (user.getAccountType()){
+                        case  "CUSTOMER" -> {
+                            new Dashboard(user);
+                        }
+                        case  "REP", "TECHNICIAN" -> {
+                            RepTechDashboard repTechDashboard = new RepTechDashboard(user);//new RepTechDashboard(user);
+                            repTechDashboard.setVisible(true);
+                        }
+                    }
                 }else{
                     JOptionPane.showMessageDialog(null, "LOGIN FAILED",
                             "LOGIN", JOptionPane.INFORMATION_MESSAGE);
@@ -136,7 +147,7 @@ public class Client {
                     JOptionPane.showMessageDialog(null, "COMPLAINT RECORDED",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                     login.setVisible(false);
-                   }else{
+                }else{
                     JOptionPane.showMessageDialog(null, "FAILED TO ADD COMPLAINT",
                             "COMPLAINT", JOptionPane.INFORMATION_MESSAGE);
                 }
@@ -147,6 +158,14 @@ public class Client {
                 if (flag) {
                     complaintsArrayList = complaints;
                     System.out.println(complaints);
+                }
+            }
+            if (action.equalsIgnoreCase("FILTER-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                Complaints complaints = (Complaints) obIs.readObject();
+                if (flag) {
+                    complaint = complaints;
+                    System.out.println(complaint);
                 }
             }
             if (action.equalsIgnoreCase("ACCOUNT-QUERY")) {

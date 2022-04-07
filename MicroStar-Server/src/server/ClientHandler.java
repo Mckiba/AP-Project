@@ -89,6 +89,13 @@ public class ClientHandler implements Runnable {
                                     Oos.writeObject(complaints);
                                     System.out.println("COMPLAINTS" + complaints.toString());
                                 }
+                                case "FILTER-COMPLAINTS" -> {
+                                    String issueID = (String) operand;
+                                    Complaints complaint = ComplaintOperations.getComplaint(issueID);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaint);
+                                    System.out.println("FILTER COMPLAINTS" + complaint.toString());
+                                }
                             }
                         }
                     }
