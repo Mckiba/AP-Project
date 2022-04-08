@@ -319,8 +319,27 @@ public class RepTechDashboard extends javax.swing.JFrame {
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        clearFields();
+        // Filtering category
+            Client client = null;
+            String selectedCategory = jComboBoxSubjects.getSelectedItem().toString();
+            try {
+                client = new Client();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String operation = "FILTER-COMPLAINTS";
+            client.sendAction(operation);
+            client.sendCategory(selectedCategory);
+            client.receiveResponse();
+            ArrayList<Complaints> complaintsList = Client.complaintsArrayList;
+
+            for (Complaints complaints : complaintsList) {
+                Object[] rowData = {complaints.getId(), complaints.getCustomerID(), complaints.getCategory(),
+                        complaints.getResponse(), complaints.getResponseProvider(), complaints.getResponseDate(),
+                        complaints.getIssueDetails()};
+                tableModel.addRow(rowData);
+            }
+        }
     }
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {

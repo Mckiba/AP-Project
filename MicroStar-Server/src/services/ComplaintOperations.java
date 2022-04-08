@@ -57,4 +57,36 @@ public class ComplaintOperations {
         }
         return complaintList;
     }
+
+
+	public static ArrayList<Complaints> getComplaintsByCategory(String category) {
+		ArrayList<Complaints> complaints = new ArrayList<>();
+		String filter = "SELECT * FROM complaints WHERE category =`` ";
+		
+		try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()){
+
+            PreparedStatement statement = dbConn.prepareStatement(filter);
+            System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
+            
+            ResultSet result = statement.executeQuery();
+            while(result.next()) {
+            	Complaints filterCat = new Complaints();// creating an object to filter category 
+            	filterCat.setCategory(result.getString(category));
+            	filterCat.setCustomerID(result.getString("customerID"));
+            	filterCat.setIssueDetails(result.getString("issue_Details"));
+            	filterCat.setResponse(result.getString("response"));
+            	filterCat.setResponseProvider(result.getString("response_provider"));
+            	filterCat.setResponseDate(result.getDate("response_date"));
+
+            	complaints.add(filterCat);
+            }
+            //System.out.println(filterCat.toString());
+
+        } catch (SQLException e) {
+            System.out.println("Error(" + e.getErrorCode()
+                    + ") " + e.getMessage());
+        }
+
+		return complaints;
+	}
 }

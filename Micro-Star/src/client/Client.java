@@ -94,6 +94,15 @@ public class Client {
             e.printStackTrace();
         }
     }
+    
+    public void sendCategory(String categoryView) {
+        this.action = action;
+        try {
+            objOs.writeObject(categoryView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void sendAccount(Accounts accountsObj) {
         this.action = action;
@@ -142,6 +151,14 @@ public class Client {
                 }
             }
             if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
+                if (flag) {
+                    complaintsArrayList = complaints;
+                    System.out.println(complaints);
+                }
+            }
+            if (action.equalsIgnoreCase("FILTER-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
                 if (flag) {
