@@ -238,7 +238,7 @@ public class TechDashboard extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String operation = "GET-COMPLAINTS";
+        String operation = "GET-ASSIGNED-COMPLAINTS";
         client.sendAction(operation);
         client.sendUser(globalUser);
         client.receiveResponse();

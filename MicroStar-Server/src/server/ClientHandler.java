@@ -97,6 +97,13 @@ public class ClientHandler implements Runnable {
                                     Oos.writeObject(complaints);
                                     System.out.println("COMPLAINTS" + complaints.toString());
                                 }
+                                case "GET-ASSIGNED-COMPLAINTS" -> {
+                                    User user = (User) operand;
+                                    ArrayList<Complaints> complaints = ComplaintOperations.getAssignedComplaints(user);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaints);
+                                    System.out.println("COMPLAINTS" + complaints.toString());
+                                }
                                 case "FILTER-COMPLAINTS" -> {
                                     String issueID = (String) operand;
                                     Complaints complaint = ComplaintOperations.getComplaint(issueID);

@@ -158,6 +158,14 @@ public class Client {
                     System.out.println(complaints);
                 }
             }
+            if (action.equalsIgnoreCase("GET-ASSIGNED-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
+                if (flag) {
+                    complaintsArrayList = complaints;
+                    System.out.println(complaints);
+                }
+            }
             if (action.equalsIgnoreCase("FILTER-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 Complaints complaints = (Complaints) obIs.readObject();
