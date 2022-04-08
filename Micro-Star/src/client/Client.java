@@ -131,13 +131,8 @@ public class Client {
                             techDashboard.setVisible(true);
                         }
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "LOGIN FAILED",
-                            "LOGIN", JOptionPane.INFORMATION_MESSAGE);
-                }
-                if (action.equalsIgnoreCase("LOG OFF")) {
-                    System.out.println("LOGGING OGG");
-                }
+                } else JOptionPane.showMessageDialog(null, "LOGIN AUTHENTICATION FAILED",
+                        "LOGIN", JOptionPane.INFORMATION_MESSAGE);
             }
             if (action.equalsIgnoreCase("ADD-COMPLAINT")) {
                 Boolean flag = (Boolean) obIs.readObject();
@@ -151,6 +146,14 @@ public class Client {
                 }
             }
             if (action.equalsIgnoreCase("GET-COMPLAINTS")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
+                if (flag) {
+                    complaintsArrayList = complaints;
+                    System.out.println(complaints);
+                }
+            }
+            if (action.equalsIgnoreCase("GET-ASSIGNED-COMPLAINTS")) {
                 Boolean flag = (Boolean) obIs.readObject();
                 ArrayList<Complaints> complaints = (ArrayList<Complaints>) obIs.readObject();
                 if (flag) {

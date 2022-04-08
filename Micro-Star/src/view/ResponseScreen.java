@@ -58,7 +58,7 @@ public class ResponseScreen extends javax.swing.JFrame {
 
         jTextField1.setText(" ");
 
-        jLabel2.setText("CUSTOMER ID");
+        jLabel2.setText("Complaint ID");
 
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
         jLabel3.setText("ISSUE");

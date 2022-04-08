@@ -2,7 +2,6 @@ package services;
 
 import factories.DBConnectorFactory;
 import factories.SessionFactoryBuilder;
-import model.Accounts;
 import model.Complaints;
 import model.User;
 import org.hibernate.HibernateException;
@@ -179,4 +178,28 @@ public class ComplaintOperations {
     }
 
 
+    public static ArrayList<Complaints> getAssignedComplaints(User user) {
+
+        ArrayList<Complaints> complaintList = new ArrayList<>();
+        String loginSql = "SELECT * FROM complaints WHERE response_provider = ?";
+        try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()) {
+            PreparedStatement statement = dbConn.prepareStatement(loginSql);
+            statement.setString(1, user.getCustomerID());
+            System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
+            ResultSet rst = statement.executeQuery();
+
+            while (rst.next()) {
+                Complaints complaints = new Complaints(rst.getString("complaintsID"),
+                        rst.getString("customerID"), rst.getString("category"),
+                        rst.getString("response"), rst.getString("response_provider"),
+                        rst.getDate("response_date"), rst.getString("issue_Details"));
+                complaintList.add(complaints);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error(" + e.getErrorCode()
+                    + ") " + e.getMessage());
+            e.printStackTrace();
+        }
+        return complaintList;
+    }
 }
