@@ -187,6 +187,16 @@ public class Client {
                             "RESPONSE", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
+            if (action.equalsIgnoreCase("ASSIGN-TECHNICIAN")) {
+                Boolean flag = (Boolean) obIs.readObject();
+                if (flag) {
+                    JOptionPane.showMessageDialog(null, "ISSUE ASSIGNED",
+                            "RESPONSE", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(null, "FAILED TO ASSIGN ISSUE",
+                            "RESPONSE", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
         } catch (ClassCastException | ClassNotFoundException | IOException ex) {
             ex.printStackTrace();
         }

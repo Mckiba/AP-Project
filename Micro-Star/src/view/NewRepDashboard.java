@@ -7,15 +7,12 @@ import client.Client;
 import model.Complaints;
 import model.User;
 
-import java.awt.Component;
 import java.awt.print.PrinterException;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 
 
 public class NewRepDashboard extends javax.swing.JFrame {
@@ -26,6 +23,8 @@ public class NewRepDashboard extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelImage;
     private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextFieldName;
+    javax.swing.JTextField issueIdTextField;
+    javax.swing.JTextField techIdTextField;
     // End of variables declaration
 
     String[] col = {"ISSUE ID", "CUSTOMER ID", "Category", "Issue Details", "Response ", "Response Provider","Response Date"};
@@ -65,8 +64,8 @@ public class NewRepDashboard extends javax.swing.JFrame {
         javax.swing.JLabel jLabel3 = new javax.swing.JLabel();
         javax.swing.JLabel jLabel4 = new javax.swing.JLabel();
         javax.swing.JLabel issueIDLabel = new javax.swing.JLabel();
-        javax.swing.JTextField issueIdTextFeild = new javax.swing.JTextField();
-        javax.swing.JTextField techIdTextFeild = new javax.swing.JTextField();
+        issueIdTextField = new javax.swing.JTextField();
+         techIdTextField = new javax.swing.JTextField();
         javax.swing.JLabel techIdLabel = new javax.swing.JLabel();
 
         // Variables declaration - do not modify
@@ -179,8 +178,8 @@ public class NewRepDashboard extends javax.swing.JFrame {
 
         issueIDLabel.setText("ISSUE ID");
 
-        issueIdTextFeild.setText("Enter Issue ID      ");
-        techIdTextFeild.setText("Enter Technician ID ");
+        issueIdTextField.setText("Enter Issue ID      ");
+        techIdTextField.setText("Enter Technician ID ");
 
         techIdLabel.setText("Technician ID");
 
@@ -244,11 +243,11 @@ public class NewRepDashboard extends javax.swing.JFrame {
                                                                                                 .addGap(114, 114, 114))
                                                                                         .addGroup(layout.createSequentialGroup()
                                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                                                .addComponent(issueIdTextFeild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addComponent(issueIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                                                 .addComponent(techIdLabel)
                                                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                                                .addComponent(techIdTextFeild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                                .addComponent(techIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                                                 .addGap(13, 13, 13))))
                                                                         .addGroup(layout.createSequentialGroup()
                                                                                 .addGap(119, 119, 119)
@@ -298,8 +297,8 @@ public class NewRepDashboard extends javax.swing.JFrame {
                                                                 .addComponent(jLabel4)
                                                                 .addGap(15, 15, 15)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                                        .addComponent(issueIdTextFeild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                        .addComponent(techIdTextFeild, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(issueIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(techIdTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(techIdLabel)
                                                                         .addComponent(issueIDLabel))
                                                                 .addGap(26, 26, 26)
@@ -408,7 +407,24 @@ public class NewRepDashboard extends javax.swing.JFrame {
 
     private void assignButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
+        ArrayList<Object> object = new ArrayList<>();
+
+        String techID =  techIdTextField.getText();
+        String issueID = issueIdTextField.getText();
+        object.add(issueID);
+        object.add(techID);
+
+        try {
+            Client client = new Client();
+            String cmd = "ASSIGN-TECHNICIAN";
+            client.sendAction(cmd);
+            client.sendObject(object);
+            client.receiveResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
 
 
