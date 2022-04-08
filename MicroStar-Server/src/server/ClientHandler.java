@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClientHandler implements Runnable {
@@ -72,6 +73,13 @@ public class ClientHandler implements Runnable {
                                         System.out.println("COMPLAINT RECORDED" + true);
                                         Oos.writeObject(true);
                                     }else Oos.writeObject(false);
+                                }
+                                case "GET-COMPLAINTS-SHAKERA" -> {
+                                    User user = (User) operand;
+                                    System.out.println("GET COMPLAINT");
+                                    List<Complaints> complaintRecorded = ComplaintOperations.queryComplaints(user);
+                                    Oos.writeObject(true);
+                                    Oos.writeObject(complaintRecorded);
                                 }
                                 case "ACCOUNT-QUERY" -> {
                                     User user = (User) operand;
@@ -132,4 +140,3 @@ public class ClientHandler implements Runnable {
         }
     }
 }
-

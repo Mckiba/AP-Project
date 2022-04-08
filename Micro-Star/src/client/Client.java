@@ -12,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 
+
 public class Client {
 
     public static ArrayList<Complaints> complaintsArrayList = null;
@@ -214,7 +215,6 @@ public class Client {
 
 
 }
-
 
 
 
