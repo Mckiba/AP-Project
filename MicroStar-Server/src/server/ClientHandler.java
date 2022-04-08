@@ -49,15 +49,13 @@ public class ClientHandler implements Runnable {
 
                             switch (action) {
                                 case "AUTHENTICATE" -> {
+                                    boolean userAuthenticated = false;
                                     User user = (User) operand;
                                     System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
                                     System.out.println(user.getEmail());
-                                    boolean userAuthenticated = UserOperation.loginAuth(user);
-                                    if (userAuthenticated) {
-                                        System.out.println("USER AUTHENTICATED" + true);
-                                        Oos.writeObject(true);
-                                        Oos.writeObject(user);
-                                    } else Oos.writeObject(false);
+                                     userAuthenticated = UserOperation.loginAuth(user);
+                                    Oos.writeObject(userAuthenticated);
+                                    if (userAuthenticated) Oos.writeObject(user);
                                 }
                                 case "LOG-OFF" -> {
                                     //TODO:HANDLE LOGOFF

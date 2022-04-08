@@ -131,13 +131,8 @@ public class Client {
                             techDashboard.setVisible(true);
                         }
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "LOGIN FAILED",
-                            "LOGIN", JOptionPane.INFORMATION_MESSAGE);
-                }
-                if (action.equalsIgnoreCase("LOG OFF")) {
-                    System.out.println("LOGGING OGG");
-                }
+                } else JOptionPane.showMessageDialog(null, "LOGIN AUTHENTICATION FAILED",
+                        "LOGIN", JOptionPane.INFORMATION_MESSAGE);
             }
             if (action.equalsIgnoreCase("ADD-COMPLAINT")) {
                 Boolean flag = (Boolean) obIs.readObject();

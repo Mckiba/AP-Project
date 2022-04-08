@@ -96,7 +96,7 @@ public class NewRepDashboard extends javax.swing.JFrame {
             }
         });
 
-        jButtonBrowseImage.setText("Call Customer");
+        jButtonBrowseImage.setText("Live Chat");
         jButtonBrowseImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonBrowseImageActionPerformed(evt);
