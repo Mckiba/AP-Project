@@ -7,13 +7,17 @@ import model.Complaints;
 import model.User;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+
 
 public class ComplaintOperations {
 
@@ -96,11 +100,83 @@ public class ComplaintOperations {
 
         return complaint;
     }
+    public static List<Complaints> queryComplaints(User userObj){
 
+        List<Complaints> complaintsList = new ArrayList<Complaints>();
 
+        String sql = "SELECT * FROM MicroStar.complaints WHERE customerID = ?";
 
+        try (Connection dbConn = DBConnectorFactory.getDatabaseConnection()){
 
+            PreparedStatement statement = dbConn.prepareStatement(sql);
+            statement.setString(1, userObj.getCustomerID());
 
+            System.out.println("Receiving results from executed Prepared Statement, Error May Occur");
+            ResultSet result = statement.executeQuery();
+
+            while(result.next()) {
+                Complaints complaint = new Complaints();
+
+                complaint.setId(result.getString(1));
+                complaint.setCustomerID(result.getString(2));
+                complaint.setCategory(result.getString(3));
+                complaint.setResponse(result.getString(4));
+                complaint.setResponseProvider(result.getString(5));
+                complaint.setResponseDate(result.getDate(6));
+                complaint.setIssueDetails(result.getString(7));
+                complaintsList.add(complaint);
+            }
+
+            System.out.println(complaintsList.toString());
+
+        } catch (SQLException e) {
+            System.out.println("Error(" + e.getErrorCode()
+                    + ") " + e.getMessage());
+        }
+
+        return complaintsList;
+    }
+
+    public static boolean addResponse(String issueID,String userId ,String response) {
+
+        Date date = new Date(); // This object contains the current date value
+
+        try (Session session = SessionFactoryBuilder.getSessionFactory().openSession()) {
+
+            Transaction tx = session.beginTransaction();
+            Complaints complaints = session.load(Complaints.class, issueID);
+            complaints.setResponseProvider(userId);
+            complaints.setResponse(response);
+            complaints.setResponseDate(date);
+            session.update(complaints);
+            tx.commit();
+            session.close();
+            SessionFactoryBuilder.closeSessionFactory();
+
+            return true;
+
+        } catch (HibernateException hex) {
+            hex.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean assignTechnician(String issueID, String techID) {
+
+        try (Session session = SessionFactoryBuilder.getSessionFactory().openSession()) {
+            Transaction tx = session.beginTransaction();
+            Complaints complaints = session.load(Complaints.class, issueID);
+            complaints.setResponseProvider(techID);
+            session.update(complaints);
+            tx.commit();
+            session.close();
+            SessionFactoryBuilder.closeSessionFactory();
+            return true;
+        } catch (HibernateException hex) {
+            hex.printStackTrace();
+            return false;
+        }
+    }
 
 
 }

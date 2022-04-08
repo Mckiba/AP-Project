@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ClientHandler implements Runnable {
@@ -47,7 +48,7 @@ public class ClientHandler implements Runnable {
                             Object operand = Ois.readObject();
 
                             switch (action) {
-                                case "AUTHENTICATE": {
+                                case "AUTHENTICATE" -> {
                                     User user = (User) operand;
                                     System.out.println("AUTHENTICATE");//handleLogin((User) receivedOp.get(1));
                                     System.out.println(user.getEmail());
@@ -58,12 +59,12 @@ public class ClientHandler implements Runnable {
                                         Oos.writeObject(user);
                                     } else Oos.writeObject(false);
                                 }
-                                case "LOG-OFF" : {
+                                case "LOG-OFF" -> {
                                     //TODO:HANDLE LOGOFF
                                     System.out.println("LOG OFF");
                                 }
 
-                                case "ADD-COMPLAINT" : {
+                                case "ADD-COMPLAINT" -> {
                                     Complaints complaint = (Complaints) operand;
                                     System.out.println("ADD COMPLAINT");
                                     System.out.println("ID: "+ complaint.getCustomerID() +" COMPLAINT: "+ complaint.getIssueDetails());
@@ -73,14 +74,14 @@ public class ClientHandler implements Runnable {
                                         Oos.writeObject(true);
                                     }else Oos.writeObject(false);
                                 }
-                                case "GET-COMPLAINTS" : {
+                                case "GET-COMPLAINTS-SHAKERA" -> {
                                     User user = (User) operand;
                                     System.out.println("GET COMPLAINT");
                                     List<Complaints> complaintRecorded = ComplaintOperations.queryComplaints(user);
                                     Oos.writeObject(true);
                                     Oos.writeObject(complaintRecorded);
                                 }
-                                case "ACCOUNT-QUERY" : {
+                                case "ACCOUNT-QUERY" -> {
                                     User user = (User) operand;
                                     System.out.println("QUERY");
                                     System.out.println(user.getCustomerID());
@@ -102,6 +103,27 @@ public class ClientHandler implements Runnable {
                                     Oos.writeObject(true);
                                     Oos.writeObject(complaint);
                                     System.out.println("FILTER COMPLAINTS" + complaint.toString());
+                                }
+                                case "ADD-RESPONSE" -> {
+                                    ArrayList<Object>objects = (ArrayList<Object>) operand;
+
+                                    String issueID = (String) objects.get(0).toString();
+                                    String userID = (String) objects.get(1).toString();
+                                    String response = (String) objects.get(2).toString();
+                                    boolean complaintAdded = ComplaintOperations.addResponse(issueID,userID,response);
+                                    Oos.writeObject(complaintAdded);
+                                    //Oos.writeObject(complaint);
+                                    System.out.println("ADDED RESPONSE");
+                                }
+                                case "ASSIGN-TECHNICIAN" -> {
+                                    ArrayList<Object>objects = (ArrayList<Object>) operand;
+
+                                    String issueID = (String) objects.get(0).toString();
+                                    String techID = (String) objects.get(1).toString();
+                                    boolean techAssigned = ComplaintOperations.assignTechnician(issueID,techID);
+                                    Oos.writeObject(techAssigned);
+                                    //Oos.writeObject(complaint);
+                                    System.out.println("ASSIGNED TECH");
                                 }
                             }
                         }

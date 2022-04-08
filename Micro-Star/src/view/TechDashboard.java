@@ -14,11 +14,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class RepTechDashboard extends javax.swing.JFrame {
+public class TechDashboard extends javax.swing.JFrame {
 
-    DefaultTableModel model;
     String selectedImagePath = "";
-    String[] col = {"ISSUE ID", "CUSTOMER ID", "Category", "Response Provider", "Response Date", "Issue Details"};
+    String[] col = {"ISSUE ID", "CUSTOMER ID", "Category", "Issue Details"};
+
     DefaultTableModel tableModel = new DefaultTableModel(col, 0);
     User globalUser;
     private javax.swing.ButtonGroup buttonGroup1;
@@ -28,14 +28,13 @@ public class RepTechDashboard extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldName;
 
-//TODO: ADD ASSIGNED TO ME BUTTON TO DASHBOARD FOR TECHNICIAN
 
     /**
-     * Creates new form RepTechDashboard
+     * Creates new form RepDashboard
      *
      * @param user
      */
-    public RepTechDashboard(User user) {
+    public TechDashboard(User user) {
         globalUser = user;
         initComponents();
         populateInputfields();
@@ -65,7 +64,6 @@ public class RepTechDashboard extends javax.swing.JFrame {
         jLabelImage = new javax.swing.JLabel();
         JButton jButtonBrowseImage = new JButton();
         JButton jButton2 = new JButton();
-        JButton jButton3 = new JButton();
         JButton jButton4 = new JButton();
         JButton jButton5 = new JButton();
         JButton jButton6 = new JButton();
@@ -83,12 +81,13 @@ public class RepTechDashboard extends javax.swing.JFrame {
         jLabel1.setText("CUSTOMER ID");
 
 
-        jComboBoxSubjects.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Pay-Per View", "Channel Listing", "Business Information Technology"}));
+        jComboBoxSubjects.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Pay-Per View", "Channel Listing", "VR", "Business Information"}));
 
         jButton1.setText("Refresh Data");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                //populateInputfields();
+                jButton5ActionPerformed();
+                populateInputfields();
             }
         });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -117,12 +116,7 @@ public class RepTechDashboard extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Assign Issue");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
+
 
         jButton4.setText("Filter by Category");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +128,7 @@ public class RepTechDashboard extends javax.swing.JFrame {
         jButton5.setText("Clear");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                jButton5ActionPerformed();
             }
         });
 
@@ -183,7 +177,6 @@ public class RepTechDashboard extends javax.swing.JFrame {
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                                                         .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(jButtonImportExcelToJtable, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                        .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 165, Short.MAX_VALUE)
                                                                         .addComponent(jButton4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(jButton5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(jButtonBrowseImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -223,7 +216,6 @@ public class RepTechDashboard extends javax.swing.JFrame {
                                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
                                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -253,8 +245,7 @@ public class RepTechDashboard extends javax.swing.JFrame {
         ArrayList<Complaints> complaintsList = Client.complaintsArrayList;
 
         for (Complaints complaints : complaintsList) {
-            Object[] rowData = {complaints.getId(), complaints.getCustomerID(), complaints.getCategory(),
-                    complaints.getResponse(), complaints.getResponseProvider(), complaints.getResponseDate(),
+            Object[] rowData =  {complaints.getId(),complaints.getCustomerID(),complaints.getCategory(),
                     complaints.getIssueDetails()};
             tableModel.addRow(rowData);
         }
@@ -293,9 +284,6 @@ public class RepTechDashboard extends javax.swing.JFrame {
 
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
 
     private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add get complaints from server code here:
@@ -315,8 +303,9 @@ public class RepTechDashboard extends javax.swing.JFrame {
         System.out.println("RESPONSE RECEIVED FROM SERVER");
     }
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+    private void jButton5ActionPerformed() {
+        // Clear field:
+        tableModel.setRowCount(0);
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
