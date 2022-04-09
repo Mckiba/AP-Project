@@ -119,7 +119,26 @@ public class NewRepDashboard extends javax.swing.JFrame {
         jButton4.setText("Filter By Category");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                //jButton4ActionPerformed(evt);
+            	
+                Client client = null;
+                String selectedCategory = jComboBoxSubjects.getSelectedItem().toString();
+                try {
+                    client = new Client();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                String operation = "FILTER-COMPLAINTS";
+                client.sendAction(operation);
+                client.sendCategory(selectedCategory);
+                client.receiveResponse();
+                ArrayList<Complaints> complaintsList = Client.complaintsArrayList;
+
+                for (Complaints complaints : complaintsList) {
+                    Object[] rowData = {complaints.getId(), complaints.getCustomerID(), complaints.getCategory(),
+                            complaints.getResponse(), complaints.getResponseProvider(), complaints.getResponseDate(),
+                            complaints.getIssueDetails()};
+                    tableModel.addRow(rowData);
+                }
             }
         });
 

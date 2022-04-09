@@ -82,6 +82,14 @@ public class Client {
         }
     }
 
+    public void sendCategory(String categoryView) {
+        this.action = action;
+        try {
+            objOs.writeObject(categoryView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void sendUser(User userObj) {
         this.action = action;
         try {
