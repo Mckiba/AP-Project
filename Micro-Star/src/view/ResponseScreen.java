@@ -8,7 +8,9 @@ package view;
 import client.Client;
 import model.User;
 
+import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  *
@@ -56,7 +58,7 @@ public class ResponseScreen extends javax.swing.JFrame {
 
         jTextField1.setText(" ");
 
-        jLabel2.setText("CUSTOMER ID");
+        jLabel2.setText("Complaint ID");
 
         jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 0, 16)); // NOI18N
         jLabel3.setText("ISSUE");
@@ -193,13 +195,30 @@ public class ResponseScreen extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         jTextField2.setText(Client.complaint.getIssueDetails());
-
     }
+
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {
         //handler submit        // TODO add your handling code here:
+        ArrayList<Object> object = new ArrayList<>();
+
+        String issueID = jTextField1.getText();
+        String response = jTextField3.getText();
+        String userId = globalUser.getCustomerID();
+        object.add(issueID);
+        object.add(userId);
+        object.add(response);
+
+        try {
+            Client client = new Client();
+            String cmd = "ADD-RESPONSE";
+            client.sendAction(cmd);
+            client.sendObject(object);
+            client.receiveResponse();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

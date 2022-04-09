@@ -58,6 +58,7 @@ public class LoginAuth {
                     return true;
                 }
             }
+            return false;
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
                     + ") " + e.getMessage());
@@ -80,10 +81,13 @@ public class LoginAuth {
                 pass = result.getString(5);
                 System.out.println("REP ID: " + ID);
                 System.out.println("REP PASS: " + pass);
-                if (ID.equals(userID) && pass.equals(password))
+                if (ID.equals(userID) && pass.equals(password)){
+                    System.out.println("USER FOUND");
                     return true;
-                System.out.println("USER FOUND");
+                }
             }
+            return false;
+
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
                     + ") " + e.getMessage());
@@ -110,6 +114,7 @@ public class LoginAuth {
                     return true;
                 }
             }
+            return false;
         } catch (SQLException e) {
             System.out.println("Error(" + e.getErrorCode()
                     + ") " + e.getMessage());
