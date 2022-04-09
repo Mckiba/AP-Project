@@ -2,17 +2,14 @@ package controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
+//import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+//import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 public class CRUD {
 	
 	private static Connection connect = null;
-	private Statement statement = null;
-	private ResultSet resultSet = null;
-	
 	public Connection getDatabaseConnection()
 	{
 		if(connect == null) {
